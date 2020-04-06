@@ -1,0 +1,69 @@
+{% from 'bootstrap/nav.html' import render_nav_item %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% block head %}
+        <title>{% block title %}{% endblock %} - devGrasys</title>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        {% block styles %}
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+            <link rel="stylesheet"
+                  href="{{ url_for('static', filename='open-iconic/font/css/open-iconic-bootstrap.css') }}">
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        {% endblock styles %}
+    {% endblock head %}
+</head>
+
+<body>
+{% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">
+                <img src="{{ url_for('static', filename='favicon_index.ico') }}" alt="devGrasys">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+                    aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <div class="navbar-nav mr-auto">
+                    {{ render_nav_item('main.index', 'Home') }}
+                </div>
+            </div>
+            <div class="navbar-nav ml-auto">
+                <a class="btn btn-outline-primary" href="{{ url_for('main.index') }}">Login</a>&nbsp;&nbsp;
+                <a class="btn btn-primary" href="{{ url_for('main.index') }}">Join</a>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+<main>
+    <div class="container">
+        {% for message in get_flashed_messages(with_categories=True) %}
+            <div class="alert alert-{{ message[0] }}">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message[1] }}
+            </div>
+        {% endfor %}
+        {% block content %}{% endblock %}
+        {% block footer %}
+            <footer>
+                <p class="float-left">
+                    <small>&copy; 2020
+                        <a href="http://www.hust.edu.cn/" title="Supported by HUST">HUST</a> -
+                        <a href="https://github.com/fn19980304" title="The author">Jifan Jiang</a>
+                    </small>
+                </p>
+                <p class="float-right">
+                    <small>Develop for the graduation design.</small>
+                </p>
+            </footer>
+        {% endblock %}
+    </div>
+</main>
+</body>
+</html>
