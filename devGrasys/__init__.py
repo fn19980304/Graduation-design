@@ -7,6 +7,7 @@ import os
 from flask import Flask
 
 from devGrasys.blueprints.auth import auth_bp
+from devGrasys.blueprints.main import main_bp
 from devGrasys.extensions import db, bootstrap
 from devGrasys.settings import config
 
@@ -31,4 +32,5 @@ def register_extensions(app):
 
 
 def register_blueprints(app):
+    app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp, url_prefix='/auth')
