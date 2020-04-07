@@ -8,7 +8,7 @@ from flask import Flask
 
 from devGrasys.blueprints.auth import auth_bp
 from devGrasys.blueprints.main import main_bp
-from devGrasys.extensions import db, bootstrap
+from devGrasys.extensions import db, bootstrap, login_manager
 from devGrasys.settings import config
 
 
@@ -29,6 +29,7 @@ def create_app(config_name=None):
 def register_extensions(app):
     db.init_app(app)
     bootstrap.init_app(app)
+    login_manager.init_app(app)
 
 
 def register_blueprints(app):
