@@ -12,9 +12,28 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from devGrasys.extensions import db
 
 
-class User(db.Model, UserMixin):
+class Student(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    # 用户资料
+    user_id = db.Column(db.String(20), unique=True, index=True)
+    password_hash = db.Column(db.String(128))
+    name = db.Column(db.String(30))
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+
+class Assistant(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String(20), unique=True, index=True)
+    password_hash = db.Column(db.String(128))
+    name = db.Column(db.String(30))
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+
+class Lecturer(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(20), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     name = db.Column(db.String(30))

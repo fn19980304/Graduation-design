@@ -8,18 +8,46 @@ from wtforms import StringField, SubmitField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, Length, Regexp, EqualTo
 from wtforms import ValidationError
 
-from devGrasys.models import User
+from devGrasys.models import Student,Assistant,Lecturer
 
 
 class RegisterFormStudent(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(1, 30)])
     user_id = StringField('UserID', validators=[DataRequired(), Length(10, 10), Regexp('^[S][0-9]*$',
                                                                                        message='Student ID should '
-                                                                                               'start with S.')])
+                                                                                               'begin with S.')])
     password = PasswordField('Password', validators=[DataRequired(), Length(8, 128), EqualTo('password2')])
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
     submit = SubmitField()
 
     def validate_user_id(self, field):
-        if User.query.filter_by(user_id=field.data).first():
+        if Student.query.filter_by(user_id=field.data).first():
+            raise ValidationError('The ID is already in use.')
+
+
+class RegisterFormAssistant(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(1, 30)])
+    user_id = StringField('UserID', validators=[DataRequired(), Length(10, 10), Regexp('^[A][0-9]*$',
+                                                                                       message='Assistant ID should '
+                                                                                               'begin with A.')])
+    password = PasswordField('Password', validators=[DataRequired(), Length(8, 128), EqualTo('password2')])
+    password2 = PasswordField('Confirm password', validators=[DataRequired()])
+    submit = SubmitField()
+
+    def validate_user_id(self, field):
+        if Assistant.query.filter_by(user_id=field.data).first():
+            raise ValidationError('The ID is already in use.')
+
+
+class RegisterFormLecturer(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(1, 30)])
+    user_id = StringField('UserID', validators=[DataRequired(), Length(10, 10), Regexp('^[L][0-9]*$',
+                                                                                       message='Lecturer ID should '
+                                                                                               'begin with L.')])
+    password = PasswordField('Password', validators=[DataRequired(), Length(8, 128), EqualTo('password2')])
+    password2 = PasswordField('Confirm password', validators=[DataRequired()])
+    submit = SubmitField()
+
+    def validate_user_id(self, field):
+        if Lecturer.query.filter_by(user_id=field.data).first():
             raise ValidationError('The ID is already in use.')
