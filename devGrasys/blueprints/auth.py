@@ -22,7 +22,7 @@ def login():
     return render_template('auth/login.html')
 
 
-@auth_bp.route('/register', methods=['GET', 'POST'])
+@auth_bp.route('/register', methods=['GET'])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
@@ -44,4 +44,40 @@ def register_student():
         db.session.add(user)
         db.session.commit()
         return redirect(url_for('.login'))
-    return render_template('auth/register.html', form=form)
+    return render_template('auth/register_student.html', form=form)
+
+
+@auth_bp.route('/register/assistant', methods=['GET', 'POST'])
+def register_assistant():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.index'))
+
+    form = RegisterFormStudent()
+    if form.validate_on_submit():
+        name = form.name.data
+        user_id = form.user_id.data
+        password = form.password.data
+        user = User(user_id=user_id, name=name)
+        user.set_password(password)  # 设置密码
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('.login'))
+    return render_template('auth/register_assistant.html', form=form)
+
+
+@auth_bp.route('/register/lecturer', methods=['GET', 'POST'])
+def register_lecturer():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.index'))
+
+    form = RegisterFormStudent()
+    if form.validate_on_submit():
+        name = form.name.data
+        user_id = form.user_id.data
+        password = form.password.data
+        user = User(user_id=user_id, name=name)
+        user.set_password(password)  # 设置密码
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('.login'))
+    return render_template('auth/register_lecturer.html', form=form)
