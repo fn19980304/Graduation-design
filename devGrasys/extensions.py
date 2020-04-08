@@ -5,7 +5,7 @@
 """
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
-from flask_login import LoginManager
+from flask_login.login_manager import LoginManager
 
 db = SQLAlchemy()
 bootstrap = Bootstrap()
@@ -14,6 +14,17 @@ login_manager = LoginManager()
 
 @login_manager.user_loader
 def load_user(user_id):
-    from devGrasys.models import User
-    user = User.query.get(int(user_id))
-    return user
+    temp = user_id.split('.')
+    try:
+        uid = temp[1]
+        if temp[0] == 'student':
+            from devGrasys.models import Student
+            return Student.query.get(int(uid))
+        elif temp[0] == 'assistant':
+            from devGrasys.models import Assistant
+            return Assistant.query.get(int(uid))
+        else:
+            from devGrasys.models import Lecturer
+            return Lecturer.query.get(int(uid))
+    except IndexError:
+        return None

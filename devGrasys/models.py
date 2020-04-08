@@ -18,8 +18,14 @@ class Student(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     name = db.Column(db.String(30))
 
+    def get_id(self):
+        return 'student.' + str(self.id)
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
+
+    def validate_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 
 class Assistant(db.Model, UserMixin):
@@ -28,8 +34,14 @@ class Assistant(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     name = db.Column(db.String(30))
 
+    def get_id(self):
+        return 'assistant.' + str(self.id)
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
+
+    def validate_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 
 class Lecturer(db.Model, UserMixin):
@@ -38,5 +50,11 @@ class Lecturer(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     name = db.Column(db.String(30))
 
+    def get_id(self):
+        return 'lecturer.' + str(self.id)
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
+
+    def validate_password(self, password):
+        return check_password_hash(self.password_hash, password)
