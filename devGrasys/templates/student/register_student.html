@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block title %}Student - Register{% endblock %}
+
+{% block content %}
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-md-8">
+                <h3>For students , you can:</h3>
+                <p>Check your homework list.</p>
+                <p>Submit your completed homework.</p>
+                <p>View your homework correction results.</p>
+                <hr />
+                <p>P.S. Your UserID should begin with S ,followed by 9 digits.</p>
+                <img src="{{ url_for('static', filename='images/student_reg.jpg') }}" class="rounded img-fluid">
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-3 w-100 bg-light">
+                    <div class="card-header">
+                        <h4>Student Account</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="navbar-nav ml-auto">
+                            {{ render_form(form) }}
+                        </div>
+                        <hr>
+                        <small>Already have an account? <a href="{{ url_for('.login_student') }}">Click here to log in.</a>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
