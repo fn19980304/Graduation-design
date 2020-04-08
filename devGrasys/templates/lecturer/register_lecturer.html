@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% from 'bootstrap/form.html' import render_form %}
 
-{% block title %}Lecturer Register{% endblock %}
+{% block title %}Lecturer - Register{% endblock %}
 
 {% block content %}
     <div class="jumbotron">
@@ -25,7 +25,7 @@
                             {{ render_form(form) }}
                         </div>
                         <hr>
-                        <small>Already have an account? <a href="{{ url_for('.login') }}">Click here to log in.</a>
+                        <small>Already have an account? <a href="{{ url_for('.login_lecturer') }}">Click here to log in.</a>
                         </small>
                     </div>
                 </div>
