@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block title %}Lecturer - Register{% endblock %}
+
+{% block content %}
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-md-8">
+                <h3>For lecturers , you can:</h3>
+                <p>Create your class.</p>
+                <p>Assign a new homework.</p>
+                <p>Check the overall completion of your class.</p>
+                <hr />
+                <p>P.S. Your UserID should begin with L ,followed by 9 digits.</p>
+                <img src="{{ url_for('static', filename='images/lecturer_reg.jpg') }}" class="rounded img-fluid">
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-3 w-100 bg-light">
+                    <div class="card-header">
+                        <h4>Lecturer Account</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="navbar-nav ml-auto">
+                            {{ render_form(form) }}
+                        </div>
+                        <hr>
+                        <small>Already have an account? <a href="{{ url_for('.login_lecturer') }}">Click here to log in.</a>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

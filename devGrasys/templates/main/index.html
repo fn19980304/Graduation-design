@@ -13,7 +13,11 @@
             <h1>Web system</h1>
             <h2>For homework management</h2>
             <p>Make the homework management easier.</p>
-            <p><a class="btn btn-primary btn-lg" href="{{ url_for('auth.register') }}">Join Now</a></p>
+            <hr />
+            <h5>Please select your account type:</h5>
+            <a class="btn btn-primary" href="{{ url_for('student.index_student') }}">Student</a>
+            <a class="btn btn-primary" href="{{ url_for('assistant.index_assistant') }}">Assistant</a>
+            <a class="btn btn-primary" href="{{ url_for('lecturer.index_lecturer') }}">Lecturer</a>
         </div>
     </div>
 </div>
