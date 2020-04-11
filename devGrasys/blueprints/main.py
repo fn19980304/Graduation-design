@@ -3,6 +3,7 @@
     :author: Jifan Jiang
     :url: https://github.com/fn19980304
 """
+
 import os
 
 from flask import Blueprint, render_template

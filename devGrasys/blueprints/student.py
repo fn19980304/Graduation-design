@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+    :author: Jifan Jiang
+    :url: https://github.com/fn19980304
+"""
+
 from flask import render_template, flash, redirect, url_for, Blueprint
 from flask_login import login_user, current_user
 

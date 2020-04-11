@@ -3,6 +3,7 @@
     :author: Jifan Jiang
     :url: https://github.com/fn19980304
 """
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, Length, Regexp, EqualTo
