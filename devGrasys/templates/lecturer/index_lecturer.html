@@ -2,28 +2,97 @@
 {% from 'bootstrap/form.html' import render_form %}
 
 {% block title %}Lecturer{% endblock %}
+{% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">
+                <img src="{{ url_for('static', filename='favicon_index.ico') }}" alt="devGrasys">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+                    aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <div class="navbar-nav mr-auto">
+                    {% if current_user.is_authenticated %}
+                        {{ render_nav_item('.index_lecturer', 'Home') }}
+                        {{ render_nav_item('.create_class', 'Create') }}
+                        {{ render_nav_item('.index_lecturer', 'Assign') }}
+                        {{ render_nav_item('.index_lecturer', 'Check') }}
+                    {% else %}
+                        {{ render_nav_item('.index_lecturer', 'Home') }}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="navbar-nav ml-auto">
+                {% if current_user.is_authenticated %}
+                    <div class="dropdown nav-item">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-expanded="false">
+                            <img class="avatar-xs"
+                                 src="{{ url_for('static', filename='images/lecturer_reg.jpg') }}">
+                            <span class="caret"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" role="menu">
+                            <h6 class="dropdown-header">Logged in as {{ current_user.name }}</h6>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ url_for('.index_lecturer') }}">
+                                <span class="oi oi-cog"></span> Settings
+                            </a>
+                            <a class="dropdown-item" href="{{ url_for('lecturer.logout_lecturer') }}">
+                                <span class="oi oi-power-standby"></span> Logout
+                            </a>
+                        </div>
+                    </div>
+                {% else %}
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+{% endblock %}
 
 {% block content %}
-    <div class="jumbotron">
-        <div class="row">
+    {% if current_user.is_authenticated %}
+        <div class="row justify-content-md-center">
             <div class="col-md-8">
-                <img src="{{ url_for('static', filename='images/lecturer_reg.jpg') }}" class="rounded img-fluid">
-            </div>
-            <div class="col-md-4">
-                <div class="card mb-3 w-100 bg-light">
-                    <div class="card-header">
-                        <h4>Welcome to use!</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="navbar-nav ml-auto">
-                            <a class="btn btn-primary" href="{{ url_for('.register_lecturer') }}">Join Now</a>
+                <h4>{{ classes| length }} Your classes:</h4>
+                <p>(class name - class introduction)</p>
+                {% for class in classes %}
+                    <div class="card mb-3 w-100 bg-light">
+                        <div class="card-header">
+                            <div class="class">
+                                <p>{{ class.name }} - {{ class.intro }}</p>
+                            </div>
                         </div>
-                        <hr>
-                        <small>Already have an account? <a href="{{ url_for('.login_lecturer') }}">Click here to log in.</a>
-                        </small>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <div class="jumbotron">
+            <div class="row">
+                <div class="col-md-8">
+                    <img src="{{ url_for('static', filename='images/lecturer_reg.jpg') }}" class="rounded img-fluid">
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-3 w-100 bg-light">
+                        <div class="card-header">
+                            <h4>Welcome to use!</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="navbar-nav ml-auto">
+                                <a class="btn btn-primary" href="{{ url_for('.register_lecturer') }}">Join Now</a>
+                            </div>
+                            <hr>
+                            <small>Already have an account? <a href="{{ url_for('.login_lecturer') }}">Click here to log
+                                in.</a>
+                            </small>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 {% endblock %}
+

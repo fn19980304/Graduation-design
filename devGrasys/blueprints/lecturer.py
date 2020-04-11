@@ -5,25 +5,27 @@
 """
 
 from flask import render_template, flash, redirect, url_for, Blueprint
-from flask_login_multi import login_user, current_user
+from flask_login import login_required, login_user, logout_user, current_user
 
-from devGrasys.models import Lecturer
-from devGrasys.forms.lecturer import RegisterFormLecturer, LoginFormLecturer
+from devGrasys.models import Lecturer, Class
+from devGrasys.forms.lecturer import RegisterFormLecturer, LoginFormLecturer, CreateClassForm
 from devGrasys.utils import redirect_back
 from devGrasys.extensions import db
 
 lecturer_bp = Blueprint('lecturer', __name__)
 
 
-@lecturer_bp.route('/student', methods=['GET'])
+@lecturer_bp.route('/', methods=['GET'])
 def index_lecturer():
-    return render_template('lecturer/index_lecturer.html')
+    user = current_user
+    classes = Class.query.filter_by(lecturer=user).all()
+    return render_template('lecturer/index_lecturer.html', classes=classes)
 
 
-@lecturer_bp.route('/lecturer/login', methods=['GET', 'POST'])
+@lecturer_bp.route('/login', methods=['GET', 'POST'])
 def login_lecturer():
     if current_user.is_authenticated:
-        return redirect(url_for('main.index'))
+        return redirect(url_for('lecturer.index_lecturer'))
 
     form = LoginFormLecturer()
     if form.validate_on_submit():
@@ -31,16 +33,21 @@ def login_lecturer():
         if user is not None and user.validate_password(form.password.data):
             if login_user(user, form.remember_me.data):
                 flash('Login success.', 'info')
-                return redirect_back()
-            else:
-                flash('Your account is blocked.', 'warning')
-                return redirect(url_for('main.index'))
+                return redirect(url_for('lecturer.index_lecturer'))
         flash('Invalid userID or password.', 'warning')
 
     return render_template('lecturer/login_lecturer.html', form=form)
 
 
-@lecturer_bp.route('/lecturer/register', methods=['GET', 'POST'])
+@lecturer_bp.route('/logout')
+@login_required
+def logout_lecturer():
+    logout_user()
+    flash('Logout success.', 'info')
+    return redirect(url_for('main.index'))
+
+
+@lecturer_bp.route('/register', methods=['GET', 'POST'])
 def register_lecturer():
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
@@ -54,5 +61,21 @@ def register_lecturer():
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('.login_lecturer'))
+        return redirect(url_for('lecturer.login_lecturer'))
     return render_template('lecturer/register_lecturer.html', form=form)
+
+
+@lecturer_bp.route('/create', methods=['GET', 'POST'])
+def create_class():
+    form = CreateClassForm()
+    user = current_user
+    if form.validate_on_submit():
+        name = form.name.data
+        intro = form.intro.data
+        my_class = Class(name=name, intro=intro)
+        user.classes.append(my_class)
+        db.session.add(my_class)
+        db.session.commit()
+        flash('Class creation success.')
+        return redirect(url_for('lecturer.index_lecturer'))
+    return render_template('lecturer/create_class.html', form=form)

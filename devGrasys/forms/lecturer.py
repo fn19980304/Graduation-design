@@ -3,12 +3,13 @@
     :author: Jifan Jiang
     :url: https://github.com/fn19980304
 """
+
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, BooleanField
+from wtforms import StringField, SubmitField, PasswordField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired, Length, Regexp, EqualTo
 from wtforms import ValidationError
 
-from devGrasys.models import Lecturer
+from devGrasys.models import Lecturer, Class
 
 
 class LoginFormLecturer(FlaskForm):
@@ -30,3 +31,13 @@ class RegisterFormLecturer(FlaskForm):
     def validate_user_id(self, field):
         if Lecturer.query.filter_by(user_id=field.data).first():
             raise ValidationError('The ID is already in use.')
+
+
+class CreateClassForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(1, 30)])
+    intro = TextAreaField('Introduction', validators=[DataRequired()])
+    submit = SubmitField('Create')
+
+    def validate_class_name(self, field):
+        if Class.query.filter_by(name=field.data).first():
+            raise ValidationError('The class name is already in use.')
