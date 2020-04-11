@@ -5,7 +5,7 @@
 """
 
 from flask import render_template, flash, redirect, url_for, Blueprint
-from flask_login_multi import login_user, current_user
+from flask_login import login_user, current_user
 
 from devGrasys.models import Assistant
 from devGrasys.forms.assistant import RegisterFormAssistant, LoginFormAssistant
