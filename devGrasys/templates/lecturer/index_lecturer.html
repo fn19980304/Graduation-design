@@ -17,7 +17,7 @@
                 <div class="navbar-nav mr-auto">
                     {% if current_user.is_authenticated %}
                         {{ render_nav_item('.index_lecturer', 'Home') }}
-                        {{ render_nav_item('.create_class', 'Create') }}
+                        {{ render_nav_item('.create_course', 'Create') }}
                         {{ render_nav_item('.index_lecturer', 'Assign') }}
                         {{ render_nav_item('.index_lecturer', 'Check') }}
                     {% else %}
@@ -56,17 +56,24 @@
     {% if current_user.is_authenticated %}
         <div class="row justify-content-md-center">
             <div class="col-md-8">
-                <h4>{{ classes| length }} Your classes:</h4>
-                <p>(class name - class introduction)</p>
-                {% for class in classes %}
-                    <div class="card mb-3 w-100 bg-light">
-                        <div class="card-header">
-                            <div class="class">
-                                <p>{{ class.name }} - {{ class.intro }}</p>
+                <div class="card mb-3 w-100 bg-light">
+                    <div class="card-header">
+                        <h4>{{ courses| length }} Your courses:</h4>
+                        <p>(course name - course introduction)</p>
+                    </div>
+                    {% for course in courses %}
+                        <div class="card-body">
+                            <div class="course">
+                                <a class="dead-link"
+                                   href="{{ url_for('lecturer.admin_course', course_name=course.name) }}">
+                                    <img src="{{ url_for('lecturer.get_avatar', filename=course.avatar_s) }}">
+                                    {{ course.name }} - {{ course.intro }}
+                                </a>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
+                        <hr/>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     {% else %}

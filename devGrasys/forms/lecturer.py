@@ -9,7 +9,7 @@ from wtforms import StringField, SubmitField, PasswordField, BooleanField, TextA
 from wtforms.validators import DataRequired, Length, Regexp, EqualTo
 from wtforms import ValidationError
 
-from devGrasys.models import Lecturer, Class
+from devGrasys.models import Lecturer, Course
 
 
 class LoginFormLecturer(FlaskForm):
@@ -33,11 +33,11 @@ class RegisterFormLecturer(FlaskForm):
             raise ValidationError('The ID is already in use.')
 
 
-class CreateClassForm(FlaskForm):
+class CreateCourseForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(1, 30)])
     intro = TextAreaField('Introduction', validators=[DataRequired()])
     submit = SubmitField('Create')
 
     def validate_class_name(self, field):
-        if Class.query.filter_by(name=field.data).first():
+        if Course.query.filter_by(name=field.data).first():
             raise ValidationError('The class name is already in use.')

@@ -23,6 +23,10 @@ class BaseConfig:
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    devGrasys_UPLOAD_PATH = os.path.join(basedir, 'uploads')
+    AVATARS_SAVE_PATH = os.path.join(devGrasys_UPLOAD_PATH, 'avatars')
+    AVATARS_SIZE_TUPLE = (30, 100, 200)
+
 
 class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = \
