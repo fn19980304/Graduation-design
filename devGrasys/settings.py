@@ -19,12 +19,14 @@ class Operations:
 class BaseConfig:
     SECRET_KEY = os.getenv('SECRET_KEY', 'secret string')
 
+    USER_PER_PAGE = 20
+
     BOOTSTRAP_SERVE_LOCAL = True
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    devGrasys_UPLOAD_PATH = os.path.join(basedir, 'uploads')
-    AVATARS_SAVE_PATH = os.path.join(devGrasys_UPLOAD_PATH, 'avatars')
+    UPLOAD_PATH = os.path.join(basedir, 'uploads')
+    AVATARS_SAVE_PATH = os.path.join(UPLOAD_PATH, 'avatars')
     AVATARS_SIZE_TUPLE = (30, 100, 200)
 
 

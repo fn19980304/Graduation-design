@@ -22,6 +22,7 @@ def create_app(config_name=None):
     app = Flask('devGrasys')
 
     app.config.from_object(config[config_name])
+
     register_extensions(app)
     register_blueprints(app)
 
