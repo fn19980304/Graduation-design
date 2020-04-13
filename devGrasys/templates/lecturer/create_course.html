@@ -1,0 +1,14 @@
+{% extends 'lecturer/base.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block title %}Create - Lecturer{% endblock %}
+
+{% block content %}
+    <h2>Please fill in the class information:</h2>
+    <hr />
+    <div class="row justify-content-md-center">
+        <div class="col-md-8">
+            {{ render_form(form) }}
+        </div>
+    </div>
+{% endblock %}

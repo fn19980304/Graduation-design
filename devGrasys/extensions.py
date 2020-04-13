@@ -3,13 +3,16 @@
     :author: Jifan Jiang
     :url: https://github.com/fn19980304
 """
+
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_login.login_manager import LoginManager
+from flask_avatars import Avatars
 
 db = SQLAlchemy()
 bootstrap = Bootstrap()
 login_manager = LoginManager()
+avatars = Avatars()
 
 
 @login_manager.user_loader

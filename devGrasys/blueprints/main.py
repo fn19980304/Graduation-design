@@ -16,3 +16,5 @@ main_bp = Blueprint('main', __name__)
 def index():
     db.create_all()
     return render_template('main/index.html')
+
+

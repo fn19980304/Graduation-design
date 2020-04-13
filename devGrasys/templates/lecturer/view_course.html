@@ -1,0 +1,37 @@
+{% extends 'lecturer/base.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block title %}View - {{ course.name }} - Lecturer{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-3">
+            <a>
+                <img src="{{ url_for('lecturer.get_avatar', filename=course.avatar_l) }}" class="rounded img-fluid">
+            </a>
+        </div>
+        <div class="col-md-9">
+            <h1>{{ course.name }}</h1>
+            <h4><small class="text-muted">{{ course.intro }}</small></h4>
+            <div class="float-right">
+                <a class="btn btn-outline-primary btn-sm"
+                   href="{{ url_for('lecturer.edit_course_profile',course_name=course.name ) }}">Edit
+                    profile</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="user-nav">
+        <ul class="nav nav-tabs">
+            {{ render_nav_item('lecturer.show_students', 'Student', course_name=course.name) }}
+            {{ render_nav_item('lecturer.show_assistants', 'Assistant', course_name=course.name) }}
+        </ul>
+        <div class="row">
+            <div class="col-md-12">
+                {% block view_content %}{% endblock %}
+            </div>
+        </div>
+        {% block pagination_content %}{% endblock %}
+    </div>
+{% endblock %}
+

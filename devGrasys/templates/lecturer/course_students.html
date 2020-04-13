@@ -1,0 +1,24 @@
+{% extends 'lecturer/view_course.html' %}
+{% from 'bootstrap/pagination.html' import render_pagination %}
+
+{% block title %}{{ course.name }} - Students{% endblock %}
+
+{% block view_content %}
+    {% if course.students.count() != 0 %}
+        {% for student in course.students.all() %}
+            <p>{{ student.name }}</p>
+        {% endfor %}
+    {% else %}
+        <div class="tip">
+            <h3>No students.</h3>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block pagination_content %}
+    {% if course.students.count() != 0 %}
+        <div class="page-footer">
+            {{ render_pagination(pagination) }}
+        </div>
+    {% endif %}
+{% endblock %}
