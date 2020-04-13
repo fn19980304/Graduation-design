@@ -1,29 +1,53 @@
-{% extends 'base.html' %}
+{% extends 'student/base.html' %}
 {% from 'bootstrap/form.html' import render_form %}
 
 {% block title %}Student{% endblock %}
 
 {% block content %}
-    <div class="jumbotron">
-        <div class="row">
+    {% if current_user.is_authenticated %}
+        <div class="row justify-content-md-center">
             <div class="col-md-8">
-                <img src="{{ url_for('static', filename='images/student_reg.jpg') }}" class="rounded img-fluid">
-            </div>
-            <div class="col-md-4">
                 <div class="card mb-3 w-100 bg-light">
                     <div class="card-header">
-                        <h4>Welcome to use!</h4>
+                        <h4>{{ courses| length }} The courses:</h4>
+                        <p>(course name - course lecturer - course introduction)</p>
                     </div>
-                    <div class="card-body">
-                        <div class="navbar-nav ml-auto">
-                            <a class="btn btn-primary" href="{{ url_for('.register_student') }}">Join Now</a>
+                    {% for course in courses %}
+                        <div class="card-body">
+                            <a class="dead-link"
+                               href="{{ url_for('student.view_course', course_name=course.name) }}">
+                                <img src="{{ url_for('student.get_avatar', filename=course.avatar_s) }}">
+                                {{ course.name }} - {{ course.lecturer_name }} - {{ course.intro }}
+                            </a>
                         </div>
-                        <hr>
-                        <small>Already have an account? <a href="{{ url_for('.login_student') }}">Click here to log in.</a>
-                        </small>
+                        <hr/>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="jumbotron">
+            <div class="row">
+                <div class="col-md-8">
+                    <img src="{{ url_for('static', filename='images/student_reg.jpg') }}" class="rounded img-fluid">
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-3 w-100 bg-light">
+                        <div class="card-header">
+                            <h4>Welcome to use!</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="navbar-nav ml-auto">
+                                <a class="btn btn-primary" href="{{ url_for('.register_student') }}">Join Now</a>
+                            </div>
+                            <hr>
+                            <small>Already have an account? <a href="{{ url_for('.login_student') }}">Click here to log
+                                in.</a>
+                            </small>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 {% endblock %}

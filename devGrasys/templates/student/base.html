@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">
+                <img src="{{ url_for('static', filename='favicon_index.ico') }}" alt="devGrasys">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+                    aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <div class="navbar-nav mr-auto">
+                    {% if current_user.is_authenticated %}
+                        {{ render_nav_item('.index_student', 'Home') }}
+                        {{ render_nav_item('.index_student', 'View') }}
+                    {% else %}
+                        {{ render_nav_item('.index_student', 'Home') }}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="navbar-nav ml-auto">
+                {% if current_user.is_authenticated %}
+                    <div class="dropdown nav-item">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-expanded="false">
+                            <img class="avatar-xs"
+                                 src="{{ url_for('static', filename='images/student_reg.jpg') }}">
+                            <span class="caret"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" role="menu">
+                            <h6 class="dropdown-header">Logged in as {{ current_user.name }}</h6>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ url_for('.index_student') }}">
+                                <span class="oi oi-cog"></span> Settings
+                            </a>
+                            <a class="dropdown-item" href="{{ url_for('student.logout_student') }}">
+                                <span class="oi oi-power-standby"></span> Logout
+                            </a>
+                        </div>
+                    </div>
+                {% else %}
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+{% endblock %}
