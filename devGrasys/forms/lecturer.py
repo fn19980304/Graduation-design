@@ -41,3 +41,13 @@ class CreateCourseForm(FlaskForm):
     def validate_class_name(self, field):
         if Course.query.filter_by(name=field.data).first():
             raise ValidationError('The class name is already in use.')
+
+
+class EditClassProfileForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(1, 30)])
+    intro = TextAreaField('Introduction', validators=[DataRequired()])
+    submit = SubmitField()
+
+    def validate_class_name(self, field):
+        if Course.query.filter_by(name=field.data).first():
+            raise ValidationError('The class name is already in use.')

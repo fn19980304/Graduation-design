@@ -4,11 +4,11 @@
     :url: https://github.com/fn19980304
 """
 
-from flask import render_template, flash, redirect, url_for, Blueprint, send_from_directory, current_app
+from flask import render_template, flash, redirect, url_for, Blueprint, send_from_directory, current_app, request
 from flask_login import login_required, login_user, logout_user, current_user
 
 from devGrasys.models import Lecturer, Course
-from devGrasys.forms.lecturer import RegisterFormLecturer, LoginFormLecturer, CreateCourseForm
+from devGrasys.forms.lecturer import RegisterFormLecturer, LoginFormLecturer, CreateCourseForm, EditClassProfileForm
 from devGrasys.utils import redirect_back
 from devGrasys.extensions import db
 
@@ -35,7 +35,7 @@ def login_lecturer():
         if user is not None and user.validate_password(form.password.data):
             if login_user(user, form.remember_me.data):
                 flash('Login success.', 'info')
-                return redirect(url_for('lecturer.index_lecturer'))
+                return redirect_back()
         flash('Invalid userID or password.', 'warning')
 
     return render_template('lecturer/login_lecturer.html', form=form)
@@ -52,7 +52,7 @@ def logout_lecturer():
 @lecturer_bp.route('/register', methods=['GET', 'POST'])
 def register_lecturer():
     if current_user.is_authenticated:
-        return redirect(url_for('main.index'))
+        return redirect(url_for('lecturer.index_lecturer'))
 
     form = RegisterFormLecturer()
     if form.validate_on_submit():
@@ -79,7 +79,8 @@ def create_course():
     if form.validate_on_submit():
         name = form.name.data
         intro = form.intro.data
-        course = Course(name=name, intro=intro)
+        lecturer_name = user.name
+        course = Course(name=name, intro=intro, lecturer_name=lecturer_name)
         user.courses.append(course)
         db.session.add(course)
         db.session.commit()
@@ -88,6 +89,42 @@ def create_course():
 
 
 @lecturer_bp.route('/<course_name>')
-def admin_course(course_name):
+def view_course(course_name):
     course = Course.query.filter_by(name=course_name).first_or_404()
-    return render_template('lecturer/admin_course.html', course=course)
+    return render_template('lecturer/view_course.html', course=course)
+
+
+@lecturer_bp.route('/<course_name>/students')
+def show_students(course_name):
+    course = Course.query.filter_by(name=course_name).first_or_404()
+    page = request.args.get('page', 1, type=int)
+    per_page = current_app.config['USER_PER_PAGE']
+    pagination = course.students.paginate(page, per_page)
+    students = pagination.items
+    return render_template('lecturer/course_students.html', course=course, pagination=pagination, students=students)
+
+
+@lecturer_bp.route('/<course_name>/assistants')
+def show_assistants(course_name):
+    course = Course.query.filter_by(name=course_name).first_or_404()
+    page = request.args.get('page', 1, type=int)
+    per_page = current_app.config['USER_PER_PAGE']
+    pagination = course.assistants.paginate(page, per_page)
+    assistants = pagination.items
+    return render_template('lecturer/course_assistants.html', course=course, pagination=pagination,
+                           assistants=assistants)
+
+
+@lecturer_bp.route('/<course_name>/admin/profile', methods=['GET', 'POST'])
+def edit_course_profile(course_name):
+    form = EditClassProfileForm()
+    course = Course.query.filter_by(name=course_name).first_or_404()
+    if form.validate_on_submit():
+        course.name = form.name.data
+        course.intro = form.intro.data
+        db.session.commit()
+        flash('Updated success.', 'success')
+        return redirect(url_for('lecturer.view_course', course_name=course.name))
+    form.name.data = course.name
+    form.intro.data = course.intro
+    return render_template('lecturer/admin_course/edit_course_profile.html', form=form)

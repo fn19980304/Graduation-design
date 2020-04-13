@@ -1,56 +1,7 @@
-{% extends 'base.html' %}
+{% extends 'lecturer/base.html' %}
 {% from 'bootstrap/form.html' import render_form %}
 
 {% block title %}Lecturer{% endblock %}
-{% block navbar %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url_for('main.index') }}">
-                <img src="{{ url_for('static', filename='favicon_index.ico') }}" alt="devGrasys">
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
-                    aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarColor01">
-                <div class="navbar-nav mr-auto">
-                    {% if current_user.is_authenticated %}
-                        {{ render_nav_item('.index_lecturer', 'Home') }}
-                        {{ render_nav_item('.create_course', 'Create') }}
-                        {{ render_nav_item('.index_lecturer', 'Assign') }}
-                        {{ render_nav_item('.index_lecturer', 'Check') }}
-                    {% else %}
-                        {{ render_nav_item('.index_lecturer', 'Home') }}
-                    {% endif %}
-                </div>
-            </div>
-            <div class="navbar-nav ml-auto">
-                {% if current_user.is_authenticated %}
-                    <div class="dropdown nav-item">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
-                           aria-expanded="false">
-                            <img class="avatar-xs"
-                                 src="{{ url_for('static', filename='images/lecturer_reg.jpg') }}">
-                            <span class="caret"></span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" role="menu">
-                            <h6 class="dropdown-header">Logged in as {{ current_user.name }}</h6>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ url_for('.index_lecturer') }}">
-                                <span class="oi oi-cog"></span> Settings
-                            </a>
-                            <a class="dropdown-item" href="{{ url_for('lecturer.logout_lecturer') }}">
-                                <span class="oi oi-power-standby"></span> Logout
-                            </a>
-                        </div>
-                    </div>
-                {% else %}
-                {% endif %}
-            </div>
-        </div>
-    </nav>
-{% endblock %}
 
 {% block content %}
     {% if current_user.is_authenticated %}
@@ -63,13 +14,11 @@
                     </div>
                     {% for course in courses %}
                         <div class="card-body">
-                            <div class="course">
-                                <a class="dead-link"
-                                   href="{{ url_for('lecturer.admin_course', course_name=course.name) }}">
-                                    <img src="{{ url_for('lecturer.get_avatar', filename=course.avatar_s) }}">
-                                    {{ course.name }} - {{ course.intro }}
-                                </a>
-                            </div>
+                            <a class="dead-link"
+                               href="{{ url_for('lecturer.view_course', course_name=course.name) }}">
+                                <img src="{{ url_for('lecturer.get_avatar', filename=course.avatar_s) }}">
+                                {{ course.name }} - {{ course.intro }}
+                            </a>
                         </div>
                         <hr/>
                     {% endfor %}
