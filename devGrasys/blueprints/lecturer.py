@@ -3,12 +3,14 @@
     :author: Jifan Jiang
     :url: https://github.com/fn19980304
 """
+from datetime import datetime
 
 from flask import render_template, flash, redirect, url_for, Blueprint, send_from_directory, current_app, request
 from flask_login import login_required, login_user, logout_user, current_user
 
-from devGrasys.models import Lecturer, Course
-from devGrasys.forms.lecturer import RegisterFormLecturer, LoginFormLecturer, CreateCourseForm, AdminCourseForm
+from devGrasys.models import Lecturer, Course, Homework
+from devGrasys.forms.lecturer import RegisterFormLecturer, LoginFormLecturer, CreateCourseForm, AdminCourseForm, \
+    AssignHomeworkForm
 from devGrasys.utils import redirect_back
 from devGrasys.extensions import db
 
@@ -75,13 +77,13 @@ def get_avatar(filename):
 @lecturer_bp.route('/create', methods=['GET', 'POST'])
 def create_course():
     form = CreateCourseForm()
-    user = current_user
+    lecturer = current_user
     if form.validate_on_submit():
         name = form.name.data
         intro = form.intro.data
-        lecturer_name = user.name
+        lecturer_name = lecturer.name
         course = Course(name=name, intro=intro, lecturer_name=lecturer_name)
-        user.courses.append(course)
+        lecturer.courses.append(course)
         db.session.add(course)
         db.session.commit()
         return redirect(url_for('lecturer.index_lecturer'))
@@ -128,3 +130,29 @@ def admin_course(course_name):
     form.name.data = course.name
     form.intro.data = course.intro
     return render_template('lecturer/admin_course.html', form=form)
+
+
+@lecturer_bp.route('/select', methods=['GET'])
+def select_course():
+    user = current_user
+    courses = Course.query.filter_by(lecturer=user).all()
+    return render_template('lecturer/select_course.html', courses=courses)
+
+
+@lecturer_bp.route('/select/<course_name>', methods=['GET', 'POST'])
+def view_homework(course_name):
+    course = Course.query.filter_by(name=course_name).first_or_404()
+    homework_group = Homework.query.filter_by(course=course)
+    form = AssignHomeworkForm()
+    current_time = datetime.utcnow()
+    if form.validate_on_submit():
+        title = form.title.data
+        description = form.description.data
+        deadline = form.deadline.data
+        new_homework = Homework(title=title, description=description, deadline=deadline)
+        course.homework_group.append(new_homework)
+        db.session.add(new_homework)
+        db.session.commit()
+        return redirect(url_for('lecturer.view_homework', course_name=course.name))
+    return render_template('lecturer/view_homework.html', course=course, homework_group=homework_group, form=form,
+                           current_time=current_time)

@@ -97,6 +97,9 @@ class Course(db.Model, UserMixin):
     # 学生对课程：多对多
     students = db.relationship('Student', secondary=course_student_table, back_populates='courses', lazy='dynamic')
 
+    # 课程对作业：一对多
+    homework_group = db.relationship('Homework', back_populates='course')
+
     def __init__(self, **kwargs):
         super(Course, self).__init__(**kwargs)
         self.generate_avatar()
@@ -134,3 +137,15 @@ class Course(db.Model, UserMixin):
 
     def assistant_is_joined(self, assistant):
         return self.assistants.filter_by(id=assistant.id).first() is not None
+
+
+class Homework(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(30))
+    description = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    deadline = db.Column(db.DateTime, index=True)
+
+    # 课程对作业：一对多
+    course_id = db.Column(db.Integer, db.ForeignKey('course.id'))
+    course = db.relationship('Course', back_populates='homework_group')

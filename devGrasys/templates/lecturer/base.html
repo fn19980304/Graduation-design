@@ -16,8 +16,7 @@
                     {% if current_user.is_authenticated %}
                         {{ render_nav_item('lecturer.index_lecturer', 'Home') }}
                         {{ render_nav_item('lecturer.create_course', 'Create') }}
-                        {{ render_nav_item('lecturer.index_lecturer', 'Assign') }}
-                        {{ render_nav_item('lecturer.index_lecturer', 'Check') }}
+                        {{ render_nav_item('lecturer.select_course', 'Assign / Check') }}
                     {% else %}
                         {{ render_nav_item('lecturer.index_lecturer', 'Home') }}
                     {% endif %}

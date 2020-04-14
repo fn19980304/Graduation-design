@@ -5,9 +5,10 @@
 """
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, BooleanField, TextAreaField
+from flask_ckeditor import CKEditorField
+from wtforms import StringField, SubmitField, PasswordField, BooleanField, TextAreaField, ValidationError
 from wtforms.validators import DataRequired, Length, Regexp, EqualTo
-from wtforms import ValidationError
+from wtforms.fields.html5 import DateField
 
 from devGrasys.models import Lecturer, Course
 
@@ -51,3 +52,10 @@ class AdminCourseForm(FlaskForm):
     def validate_class_name(self, field):
         if Course.query.filter_by(name=field.data).first():
             raise ValidationError('The class name is already in use.')
+
+
+class AssignHomeworkForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired(), Length(1, 30)])
+    description = CKEditorField('Description', validators=[DataRequired()])
+    deadline=DateField('Deadline',format='%Y-%m-%d')
+    submit = SubmitField('Assign')

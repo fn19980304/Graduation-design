@@ -1,0 +1,28 @@
+{% extends 'lecturer/base.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block title %}Select Course - Lecturer{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-md-center">
+        <div class="col-md-8">
+            <div class="card mb-3 w-100 bg-light">
+                <div class="card-header">
+                    <h4>Please select the course:</h4>
+                    <p>(course name - course introduction)</p>
+                </div>
+                {% for course in courses %}
+                    <div class="card-body">
+                        <a class="dead-link"
+                           href="{{ url_for('lecturer.view_homework', course_name=course.name) }}">
+                            <img src="{{ url_for('lecturer.get_avatar', filename=course.avatar_s) }}">
+                            {{ course.name }} - {{ course.intro }}
+                        </a>
+                    </div>
+                    <hr/>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

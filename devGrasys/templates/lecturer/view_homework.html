@@ -1,0 +1,26 @@
+{% extends 'lecturer/base.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block title %}View - {{ course.name }} Homework - Lecturer{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-8">
+            <h3>The assignment:</h3>
+            <h4>(title - starting time - deadline)</h4>
+            {% for homework in homework_group %}
+                <p><span class="oi oi-clock"></span> {{ homework.title }}
+                    - {{ moment(homework.timestamp).format('LL') }}
+                    - {{ moment(homework.deadline).format('LL') }}
+                </p>
+            {% endfor %}
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-8">
+            <h3>New assignment:</h3>
+            {{ render_form(form) }}
+        </div>
+    </div>
+{% endblock %}
