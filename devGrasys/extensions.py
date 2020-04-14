@@ -8,11 +8,15 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_login.login_manager import LoginManager
 from flask_avatars import Avatars
+from flask_moment import Moment
+from flask_ckeditor import CKEditor
 
 db = SQLAlchemy()
 bootstrap = Bootstrap()
 login_manager = LoginManager()
 avatars = Avatars()
+moment = Moment()
+ckeditor = CKEditor()
 
 
 @login_manager.user_loader

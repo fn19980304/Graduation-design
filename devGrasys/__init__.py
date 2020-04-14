@@ -11,7 +11,7 @@ from devGrasys.blueprints.main import main_bp
 from devGrasys.blueprints.student import student_bp
 from devGrasys.blueprints.lecturer import lecturer_bp
 from devGrasys.blueprints.assistant import assistant_bp
-from devGrasys.extensions import db, bootstrap, login_manager, avatars
+from devGrasys.extensions import db, bootstrap, login_manager, avatars, moment, ckeditor
 from devGrasys.settings import config
 
 
@@ -34,6 +34,8 @@ def register_extensions(app):
     bootstrap.init_app(app)
     login_manager.init_app(app)
     avatars.init_app(app)
+    moment.init_app(app)
+    ckeditor.init_app(app)
 
 
 def register_blueprints(app):

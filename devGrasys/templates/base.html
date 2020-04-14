@@ -67,6 +67,10 @@
     <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {{ moment.include_jquery() }}
+    {{ moment.include_moment(local_js=url_for('static', filename='js/moment-with-locales.min.js')) }}
+    {{ moment.locale('en') }}
+    {{ ckeditor.load() }}
 {% endblock %}
 
 </body>
