@@ -8,7 +8,7 @@ from flask import render_template, flash, redirect, url_for, Blueprint, send_fro
 from flask_login import login_required, login_user, logout_user, current_user
 
 from devGrasys.models import Lecturer, Course
-from devGrasys.forms.lecturer import RegisterFormLecturer, LoginFormLecturer, CreateCourseForm, EditClassProfileForm
+from devGrasys.forms.lecturer import RegisterFormLecturer, LoginFormLecturer, CreateCourseForm, AdminCourseForm
 from devGrasys.utils import redirect_back
 from devGrasys.extensions import db
 
@@ -116,8 +116,8 @@ def show_assistants(course_name):
 
 
 @lecturer_bp.route('/<course_name>/admin/profile', methods=['GET', 'POST'])
-def edit_course_profile(course_name):
-    form = EditClassProfileForm()
+def admin_course(course_name):
+    form = AdminCourseForm()
     course = Course.query.filter_by(name=course_name).first_or_404()
     if form.validate_on_submit():
         course.name = form.name.data
@@ -127,4 +127,4 @@ def edit_course_profile(course_name):
         return redirect(url_for('lecturer.view_course', course_name=course.name))
     form.name.data = course.name
     form.intro.data = course.intro
-    return render_template('lecturer/admin_course/edit_course_profile.html', form=form)
+    return render_template('lecturer/admin_course.html', form=form)

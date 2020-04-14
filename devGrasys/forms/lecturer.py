@@ -43,7 +43,7 @@ class CreateCourseForm(FlaskForm):
             raise ValidationError('The class name is already in use.')
 
 
-class EditClassProfileForm(FlaskForm):
+class AdminCourseForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(1, 30)])
     intro = TextAreaField('Introduction', validators=[DataRequired()])
     submit = SubmitField()
