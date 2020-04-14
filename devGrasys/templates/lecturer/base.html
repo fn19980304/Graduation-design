@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block navbar %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="{{ url_for('main.index') }}">
                 <img src="{{ url_for('static', filename='favicon_index.ico') }}" alt="devGrasys">
@@ -14,12 +14,12 @@
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <div class="navbar-nav mr-auto">
                     {% if current_user.is_authenticated %}
-                        {{ render_nav_item('.index_lecturer', 'Home') }}
-                        {{ render_nav_item('.create_course', 'Create') }}
-                        {{ render_nav_item('.index_lecturer', 'Assign') }}
-                        {{ render_nav_item('.index_lecturer', 'Check') }}
+                        {{ render_nav_item('lecturer.index_lecturer', 'Home') }}
+                        {{ render_nav_item('lecturer.create_course', 'Create') }}
+                        {{ render_nav_item('lecturer.index_lecturer', 'Assign') }}
+                        {{ render_nav_item('lecturer.index_lecturer', 'Check') }}
                     {% else %}
-                        {{ render_nav_item('.index_lecturer', 'Home') }}
+                        {{ render_nav_item('lecturer.index_lecturer', 'Home') }}
                     {% endif %}
                 </div>
             </div>
