@@ -5,6 +5,7 @@
 """
 
 from flask_wtf import FlaskForm
+from flask_ckeditor import CKEditorField
 from wtforms import StringField, SubmitField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, Length, Regexp, EqualTo
 from wtforms import ValidationError
@@ -31,3 +32,8 @@ class RegisterFormStudent(FlaskForm):
     def validate_user_id(self, field):
         if Student.query.filter_by(user_id=field.data).first():
             raise ValidationError('The ID is already in use.')
+
+
+class AnswerForm(FlaskForm):
+    body = CKEditorField('Your answer:', validators=[DataRequired()])
+    submit = SubmitField()

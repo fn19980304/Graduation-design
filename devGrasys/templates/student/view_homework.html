@@ -1,0 +1,25 @@
+{% extends 'student/base.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block title %}View / Answer - {{ homework.title }} - Student{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-8">
+            <h3>{{ homework.title }}:</h3>
+            <h5>{{ homework.description | safe }}</h5>
+            <hr/>
+            {% if homework.is_answered(student) %}
+                <p>Your answer:</p>
+                <p>{{ answer.body | safe }}</p>
+            {% else %}
+                {{ render_form(form) }}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {{ ckeditor.load() }}
+{% endblock %}

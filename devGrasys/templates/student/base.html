@@ -3,7 +3,7 @@
 {% block navbar %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('main.index') }}">
+            <a class="navbar-brand" href="{{ url_for('student.index_student') }}">
                 <img src="{{ url_for('static', filename='favicon_index.ico') }}" alt="devGrasys">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
@@ -15,7 +15,7 @@
                 <div class="navbar-nav mr-auto">
                     {% if current_user.is_authenticated %}
                         {{ render_nav_item('student.index_student', 'Home') }}
-                        {{ render_nav_item('student.index_student', 'View') }}
+                        {{ render_nav_item('student.select_course', 'View / Answer') }}
                     {% else %}
                         {{ render_nav_item('student.index_student', 'Home') }}
                     {% endif %}

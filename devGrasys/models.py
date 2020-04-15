@@ -30,6 +30,8 @@ class Student(db.Model, UserMixin):
 
     courses = db.relationship('Course', secondary=course_student_table, back_populates='students', lazy='dynamic')
 
+    answers = db.relationship('Answer', back_populates='student', lazy='dynamic')
+
     def get_id(self):
         return 'student.' + str(self.id)
 
@@ -143,9 +145,30 @@ class Homework(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(30))
     description = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    timestamp = db.Column(db.DateTime, default=datetime.now, index=True)
     deadline = db.Column(db.DateTime, index=True)
 
     # 课程对作业：一对多
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'))
     course = db.relationship('Course', back_populates='homework_group')
+
+    answers = db.relationship('Answer', back_populates='homework', lazy='dynamic')
+
+    def is_answered(self, student):
+        return self.answers.filter_by(student=student).first() is not None
+
+
+class Answer(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, default=datetime.now, index=True)
+
+    # 作业对作答：一对多
+    homework_id = db.Column(db.Integer, db.ForeignKey('homework.id'))
+    homework = db.relationship('Homework', back_populates='answers')
+
+    # 学生对作答：一对多
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'))
+    student = db.relationship('Student', back_populates='answers')
+
+

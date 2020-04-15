@@ -7,8 +7,8 @@
 from flask import render_template, flash, redirect, url_for, Blueprint, send_from_directory, current_app
 from flask_login import login_user, current_user, login_required, logout_user
 
-from devGrasys.models import Student, Course, Lecturer
-from devGrasys.forms.student import RegisterFormStudent, LoginFormStudent
+from devGrasys.models import Student, Course, Homework, Answer
+from devGrasys.forms.student import RegisterFormStudent, LoginFormStudent, AnswerForm
 from devGrasys.utils import redirect_back
 from devGrasys.extensions import db
 
@@ -19,8 +19,7 @@ student_bp = Blueprint('student', __name__)
 def index_student():
     if current_user.is_authenticated:
         courses = Course.query.all()
-        lecturers = Lecturer.query.all()
-        return render_template('student/index_student.html', courses=courses, lecturers=lecturers)
+        return render_template('student/index_student.html', courses=courses)
     return render_template('student/index_student.html')
 
 
@@ -103,3 +102,35 @@ def quit_course(course_name):
     course.student_quit(student)
     flash('Course quoted.', 'success')
     return redirect_back()
+
+
+@student_bp.route('/select', methods=['GET'])
+def select_course():
+    student = current_user
+    courses = Course.query.all()
+    return render_template('student/select_course.html', courses=courses, student=student)
+
+
+@student_bp.route('/select/<course_name>', methods=['GET'])
+def view_list(course_name):
+    course = Course.query.filter_by(name=course_name).first_or_404()
+    homework_group = Homework.query.filter_by(course=course)
+    return render_template('student/view_list.html', course=course, homework_group=homework_group)
+
+
+@student_bp.route('/select/<course_name>/<homework_title>', methods=['GET', 'POST'])
+def view_homework(course_name, homework_title):
+    student = current_user
+    course = Course.query.filter_by(name=course_name).first_or_404()
+    homework = Homework.query.filter_by(course=course).filter_by(title=homework_title).first_or_404()
+    form = AnswerForm()
+    if not homework.is_answered(student=student) and form.validate_on_submit():
+        body = form.body.data
+        answer = Answer(body=body)
+        homework.answers.append(answer)
+        student.answers.append(answer)
+        db.session.add(answer)
+        db.session.commit()
+        return redirect(url_for('student.view_homework', course_name=course.name, homework_title=homework.title))
+    answer = homework.answers.filter_by(student=student).first()
+    return render_template('student/view_homework.html', homework=homework, student=student, answer=answer, form=form)
