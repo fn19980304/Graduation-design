@@ -10,8 +10,21 @@
             <h5>{{ homework.description | safe }}</h5>
             <hr/>
             {% if homework.is_answered(student) %}
-                <p>Your answer:</p>
+                <h3>Your answer:</h3>
                 <p>{{ answer.body | safe }}</p>
+                <hr/>
+                <h3>The correction result:</h3>
+                {% if answer.is_corrected() %}
+                    <h4>Assistant remark:</h4>
+                    <p>{{ correct.body | safe }}</p>
+                    <h4>Your grade:</h4>
+                    <p>{{ correct.grade }}</p>
+                {% else %}
+                    <div class="tip">
+                        <h3>Not corrected yet!</h3>
+                        <h3>Please wait the assistant to correct your answer.</h3>
+                    </div>
+                {% endif %}
             {% else %}
                 {{ render_form(form) }}
             {% endif %}

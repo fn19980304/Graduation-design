@@ -7,7 +7,7 @@
 from flask import render_template, flash, redirect, url_for, Blueprint, send_from_directory, current_app
 from flask_login import login_user, current_user, login_required, logout_user
 
-from devGrasys.models import Student, Course, Homework, Answer
+from devGrasys.models import Student, Course, Homework, Answer, Correct
 from devGrasys.forms.student import RegisterFormStudent, LoginFormStudent, AnswerForm
 from devGrasys.utils import redirect_back
 from devGrasys.extensions import db
@@ -133,4 +133,6 @@ def view_homework(course_name, homework_title):
         db.session.commit()
         return redirect(url_for('student.view_homework', course_name=course.name, homework_title=homework.title))
     answer = homework.answers.filter_by(student=student).first()
-    return render_template('student/view_homework.html', homework=homework, student=student, answer=answer, form=form)
+    correct = Correct.query.filter_by(answer=answer).first()
+    return render_template('student/view_homework.html', homework=homework, student=student, answer=answer,
+                           correct=correct, form=form)
