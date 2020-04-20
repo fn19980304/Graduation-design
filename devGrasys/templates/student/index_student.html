@@ -9,19 +9,44 @@
             <div class="col-md-8">
                 <div class="card mb-3 w-100 bg-light">
                     <div class="card-header">
-                        <h4>{{ courses| length }} The courses:</h4>
-                        <p>(course name - course lecturer - course introduction)</p>
+                        <img class="rounded img-fluid avatar-s"
+                             src="{{ url_for('student.get_avatar', filename=current_user.avatar_m) }}">
+                        <span class="card-title">{{ current_user.name }}</span>
                     </div>
-                    {% for course in courses %}
+                    {% if courses|length ==0 %}
+                        <div class="tip">
+                            <h3>No course yet!</h3>
+                            <h3>Please wait.</h3>
+                        </div>
+                    {% else %}
                         <div class="card-body">
-                            <a class="dead-link"
-                               href="{{ url_for('student.view_course', course_name=course.name) }}">
-                                <img src="{{ url_for('student.get_avatar', filename=course.avatar_s) }}">
-                                {{ course.name }} - {{ course.lecturer_name }} - {{ course.intro }}
-                            </a>
+                            {% for course in courses %}
+                                {% if not course.student_is_joined(student) %}
+                                    <h3>{{ courses| length }} The courses you can join:</h3>
+                                    <p>(course name - course lecturer - course introduction)</p>
+                                    <a class="dead-link"
+                                       href="{{ url_for('student.view_course', course_name=course.name) }}">
+                                        <img src="{{ url_for('student.get_avatar', filename=course.avatar_s) }}">
+                                        {{ course.name }} - {{ course.lecturer_name }} - {{ course.intro }}
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="card-body">
+                            {% for course in courses %}
+                                {% if course.student_is_joined(student) %}
+                                    <h3>{{ courses| length }} The courses you have already joined:</h3>
+                                    <p>(course name - course lecturer - course introduction)</p>
+                                    <a class="dead-link"
+                                       href="{{ url_for('student.view_course', course_name=course.name) }}">
+                                        <img src="{{ url_for('student.get_avatar', filename=course.avatar_s) }}">
+                                        {{ course.name }} - {{ course.lecturer_name }} - {{ course.intro }}
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                         <hr/>
-                    {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -29,7 +54,8 @@
         <div class="jumbotron">
             <div class="row">
                 <div class="col-md-8">
-                    <img src="{{ url_for('static', filename='images/student_reg.jpg') }}" class="rounded img-fluid">
+                    <img src="{{ url_for('static', filename='images/student_reg.jpg') }}"
+                         class="rounded img-fluid">
                 </div>
                 <div class="col-md-4">
                     <div class="card mb-3 w-100 bg-light">
@@ -38,10 +64,14 @@
                         </div>
                         <div class="card-body">
                             <div class="navbar-nav ml-auto">
-                                <a class="btn btn-outline-dark" href="{{ url_for('student.register_student') }}">Join Now</a>
+                                <a class="btn btn-outline-dark"
+                                   href="{{ url_for('student.register_student') }}">Join
+                                    Now</a>
                             </div>
                             <hr>
-                            <small>Already have an account? <a href="{{ url_for('student.login_student') }}">Click here to log
+                            <small>Already have an account? <a
+                                    href="{{ url_for('student.login_student') }}">Click here
+                                to log
                                 in.</a>
                             </small>
                         </div>

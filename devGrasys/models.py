@@ -28,9 +28,26 @@ class Student(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     name = db.Column(db.String(30))
 
+    avatar_s = db.Column(db.String(64))
+    avatar_m = db.Column(db.String(64))
+    avatar_l = db.Column(db.String(64))
+    avatar_raw = db.Column(db.String(64))
+
     courses = db.relationship('Course', secondary=course_student_table, back_populates='students', lazy='dynamic')
 
     answers = db.relationship('Answer', back_populates='student', lazy='dynamic')
+
+    def __init__(self, **kwargs):
+        super(Student, self).__init__(**kwargs)
+        self.generate_avatar()
+
+    def generate_avatar(self):
+        avatar = Identicon()
+        filenames = avatar.generate(text=self.name)
+        self.avatar_s = filenames[0]
+        self.avatar_m = filenames[1]
+        self.avatar_l = filenames[2]
+        db.session.commit()
 
     def get_id(self):
         return 'student.' + str(self.id)
@@ -165,7 +182,7 @@ class Answer(db.Model):
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.now, index=True)
 
-    correct = db.relationship('Correct', back_populates='answer',lazy='dynamic')
+    correct = db.relationship('Correct', back_populates='answer', lazy='dynamic')
 
     # 作业对作答：一对多
     homework_id = db.Column(db.Integer, db.ForeignKey('homework.id'))

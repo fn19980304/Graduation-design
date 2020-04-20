@@ -9,7 +9,7 @@ try:
 except ImportError:
     from urllib.parse import urlparse, urljoin
 
-from flask import request, url_for, redirect
+from flask import request, url_for, redirect, flash
 
 
 def is_safe_url(target):
@@ -26,3 +26,12 @@ def redirect_back(default='main.index', **kwargs):
         if is_safe_url(target):
             return redirect(target)
     return redirect(url_for(default, **kwargs))
+
+
+def flash_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(u"Error in the %s field - %s" % (
+                getattr(form, field).label.text,
+                error
+            ))

@@ -8,9 +8,10 @@ from flask import render_template, flash, redirect, url_for, Blueprint, send_fro
 from flask_login import login_user, current_user, login_required, logout_user
 
 from devGrasys.models import Student, Course, Homework, Answer, Correct
-from devGrasys.forms.student import RegisterFormStudent, LoginFormStudent, AnswerForm
-from devGrasys.utils import redirect_back
-from devGrasys.extensions import db
+from devGrasys.forms.student import RegisterFormStudent, LoginFormStudent, AnswerForm, EditProfileStudentForm, \
+    UploadAvatarStudentForm, CropAvatarStudentForm
+from devGrasys.utils import redirect_back, flash_errors
+from devGrasys.extensions import db, avatars
 
 student_bp = Blueprint('student', __name__)
 
@@ -136,3 +137,53 @@ def view_homework(course_name, homework_title):
     correct = Correct.query.filter_by(answer=answer).first()
     return render_template('student/view_homework.html', homework=homework, student=student, answer=answer,
                            correct=correct, form=form)
+
+
+@student_bp.route('/settings/profile', methods=['GET', 'POST'])
+def edit_profile():
+    form = EditProfileStudentForm()
+    if form.validate_on_submit():
+        current_user.name = form.name.data
+        db.session.commit()
+        flash('Profile updated.', 'success')
+        return redirect(url_for('student.index_student'))
+    form.name.data = current_user.name
+    return render_template('student/settings/edit_profile.html', form=form)
+
+
+@student_bp.route('/settings/avatar')
+def change_avatar():
+    upload_form = UploadAvatarStudentForm()
+    crop_form = CropAvatarStudentForm()
+    return render_template('student/settings/change_avatar.html', upload_form=upload_form, crop_form=crop_form)
+
+
+@student_bp.route('/settings/avatar/upload', methods=['POST'])
+def upload_avatar():
+    form = UploadAvatarStudentForm()
+    if form.validate_on_submit():
+        image = form.image.data
+        filename = avatars.save_avatar(image)
+        current_user.avatar_raw = filename
+        db.session.commit()
+        flash('Image uploaded, please crop.', 'success')
+    flash_errors(form)
+    return redirect(url_for('.change_avatar'))
+
+
+@student_bp.route('/settings/avatar/crop', methods=['POST'])
+def crop_avatar():
+    form = CropAvatarStudentForm()
+    if form.validate_on_submit():
+        x = form.x.data
+        y = form.y.data
+        w = form.w.data
+        h = form.h.data
+        filenames = avatars.crop_avatar(current_user.avatar_raw, x, y, w, h)
+        current_user.avatar_s = filenames[0]
+        current_user.avatar_m = filenames[1]
+        current_user.avatar_l = filenames[2]
+        db.session.commit()
+        flash('Avatar updated.', 'success')
+    flash_errors(form)
+    return redirect(url_for('.change_avatar'))
