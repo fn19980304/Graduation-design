@@ -154,6 +154,8 @@ class Homework(db.Model):
 
     answers = db.relationship('Answer', back_populates='homework', lazy='dynamic')
 
+    corrects = db.relationship('Correct', back_populates='homework', lazy='dynamic')
+
     def is_answered(self, student):
         return self.answers.filter_by(student=student).first() is not None
 
@@ -163,6 +165,8 @@ class Answer(db.Model):
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.now, index=True)
 
+    correct = db.relationship('Correct', back_populates='answer',lazy='dynamic')
+
     # 作业对作答：一对多
     homework_id = db.Column(db.Integer, db.ForeignKey('homework.id'))
     homework = db.relationship('Homework', back_populates='answers')
@@ -171,4 +175,20 @@ class Answer(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'))
     student = db.relationship('Student', back_populates='answers')
 
+    def is_corrected(self):
+        return self.correct.first() is not None
 
+
+class Correct(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.Text)
+    grade = db.Column(db.String(1))
+    timestamp = db.Column(db.DateTime, default=datetime.now, index=True)
+
+    # 作业对批改：一对多
+    homework_id = db.Column(db.Integer, db.ForeignKey('homework.id'))
+    homework = db.relationship('Homework', back_populates='corrects')
+
+    # 作答对批改：一对一
+    answer_id = db.Column(db.Integer, db.ForeignKey('answer.id'))
+    answer = db.relationship('Answer', back_populates='correct', uselist=False)

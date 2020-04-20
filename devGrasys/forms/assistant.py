@@ -5,7 +5,8 @@
 """
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, BooleanField
+from flask_ckeditor import CKEditorField
+from wtforms import StringField, SubmitField, PasswordField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Length, Regexp, EqualTo
 from wtforms import ValidationError
 
@@ -31,3 +32,13 @@ class RegisterFormAssistant(FlaskForm):
     def validate_user_id(self, field):
         if Assistant.query.filter_by(user_id=field.data).first():
             raise ValidationError('The ID is already in use.')
+
+
+class CorrectHomeworkForm(FlaskForm):
+    body = CKEditorField('Your remark to the answer:', validators=[DataRequired()])
+    grade = SelectField('Answer grade:',
+                        validators=[DataRequired()],
+                        choices=[('A', 'A - Excellent'), ('B', 'B - Well'), ('C', 'C - Qualified'),
+                                 ('D', 'D - Unqualified')],
+                        )
+    submit = SubmitField()

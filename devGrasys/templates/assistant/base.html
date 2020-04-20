@@ -15,7 +15,7 @@
                 <div class="navbar-nav mr-auto">
                     {% if current_user.is_authenticated %}
                         {{ render_nav_item('assistant.index_assistant', 'Home') }}
-                        {{ render_nav_item('assistant.index_assistant', 'View') }}
+                        {{ render_nav_item('assistant.select_course', 'View / Correct') }}
                     {% else %}
                         {{ render_nav_item('assistant.index_assistant', 'Home') }}
                     {% endif %}

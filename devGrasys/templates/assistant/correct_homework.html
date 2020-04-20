@@ -1,0 +1,32 @@
+{% extends 'assistant/base.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block title %}View / Correct - {{ homework.title }} - {{ student.name }} - Assistant{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-8">
+            <h3>Student name:</h3>
+            <p>{{ student.name }}</p>
+            <hr/>
+            <h3>Answer content:</h3>
+            <p>{{ answer.body | safe }}</p>
+            <hr/>
+            {% if answer.is_corrected() %}
+                <h3>Your remark:</h3>
+                <p>{{ correct.body | safe }}</p>
+                <hr/>
+                <h3>The grade:</h3>
+                <p>{{ correct.grade }}</p>
+            {% else %}
+                <h3>Correct the answer:</h3>
+                {{ render_form(form) }}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {{ ckeditor.load() }}
+{% endblock %}
