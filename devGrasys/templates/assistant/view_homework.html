@@ -8,7 +8,7 @@
         <div class="col-md-8">
             <h3>{{ homework.title }}:</h3>
             <h5>{{ homework.description | safe }}</h5>
-            <h5><span class="oi oi-clock"></span>
+            <h5><span class="oi oi-calendar"></span>
                 {{ moment(homework.timestamp).format('LL') }}
                 - {{ moment(homework.deadline).format('LL') }}
             </h5>
@@ -21,6 +21,12 @@
                     <span class="oi oi-clock"></span> {{ answer.student.name }}
                     - {{ moment(answer.timestamp).format('LL') }}
                 </a>
+                {% if answer.is_corrected() %}
+                    <span class="oi oi-check"></span>
+                {% else %}
+                    <span class="oi oi-x"></span>
+                {% endif %}
+                <br/>
             {% endfor %}
         </div>
     </div>
