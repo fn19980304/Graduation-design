@@ -40,12 +40,12 @@ class AnswerForm(FlaskForm):
     submit = SubmitField()
 
 
-class EditProfileStudentForm(FlaskForm):
+class EditProfileFormStudent(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(1, 30)])
     submit = SubmitField()
 
 
-class UploadAvatarStudentForm(FlaskForm):
+class UploadAvatarFormStudent(FlaskForm):
     image = FileField('Upload', validators=[
         FileRequired(),
         FileAllowed(['jpg', 'png'], 'The file format should be .jpg or .png.')
@@ -53,7 +53,7 @@ class UploadAvatarStudentForm(FlaskForm):
     submit = SubmitField()
 
 
-class CropAvatarStudentForm(FlaskForm):
+class CropAvatarFormStudent(FlaskForm):
     x = HiddenField()
     y = HiddenField()
     w = HiddenField()

@@ -8,9 +8,10 @@ from flask import render_template, flash, redirect, url_for, Blueprint, send_fro
 from flask_login import login_user, current_user, login_required, logout_user
 
 from devGrasys.models import Assistant, Course, Lecturer, Homework, Answer, Student, Correct
-from devGrasys.forms.assistant import RegisterFormAssistant, LoginFormAssistant, CorrectHomeworkForm
-from devGrasys.utils import redirect_back
-from devGrasys.extensions import db
+from devGrasys.forms.assistant import RegisterFormAssistant, LoginFormAssistant, CorrectHomeworkForm, \
+    EditProfileFormAssistant, CropAvatarFormAssistant, UploadAvatarFormAssistant
+from devGrasys.utils import redirect_back, flash_errors
+from devGrasys.extensions import db, avatars
 
 assistant_bp = Blueprint('assistant', __name__)
 
@@ -18,9 +19,11 @@ assistant_bp = Blueprint('assistant', __name__)
 @assistant_bp.route('/', methods=['GET'])
 def index_assistant():
     if current_user.is_authenticated:
+        assistant = current_user
         courses = Course.query.all()
         lecturers = Lecturer.query.all()
-        return render_template('assistant/index_assistant.html', courses=courses, lecturers=lecturers)
+        return render_template('assistant/index_assistant.html', courses=courses, lecturers=lecturers,
+                               assistant=assistant)
     return render_template('assistant/index_assistant.html')
 
 
@@ -149,3 +152,53 @@ def correct_homework(course_name, homework_title, student_name):
     return render_template('assistant/correct_homework.html', correct=correct, answer=answer, student=student,
                            homework=homework,
                            form=form)
+
+
+@assistant_bp.route('/settings/profile', methods=['GET', 'POST'])
+def edit_profile():
+    form = EditProfileFormAssistant()
+    if form.validate_on_submit():
+        current_user.name = form.name.data
+        db.session.commit()
+        flash('Profile updated.', 'success')
+        return redirect(url_for('assistant.index_assistant'))
+    form.name.data = current_user.name
+    return render_template('assistant/settings/edit_profile.html', form=form)
+
+
+@assistant_bp.route('/settings/avatar')
+def change_avatar():
+    upload_form = UploadAvatarFormAssistant()
+    crop_form = CropAvatarFormAssistant()
+    return render_template('assistant/settings/change_avatar.html', upload_form=upload_form, crop_form=crop_form)
+
+
+@assistant_bp.route('/settings/avatar/upload', methods=['POST'])
+def upload_avatar():
+    form = UploadAvatarFormAssistant()
+    if form.validate_on_submit():
+        image = form.image.data
+        filename = avatars.save_avatar(image)
+        current_user.avatar_raw = filename
+        db.session.commit()
+        flash('Image uploaded, please crop.', 'success')
+    flash_errors(form)
+    return redirect(url_for('.change_avatar'))
+
+
+@assistant_bp.route('/settings/avatar/crop', methods=['POST'])
+def crop_avatar():
+    form = CropAvatarFormAssistant()
+    if form.validate_on_submit():
+        x = form.x.data
+        y = form.y.data
+        w = form.w.data
+        h = form.h.data
+        filenames = avatars.crop_avatar(current_user.avatar_raw, x, y, w, h)
+        current_user.avatar_s = filenames[0]
+        current_user.avatar_m = filenames[1]
+        current_user.avatar_l = filenames[2]
+        db.session.commit()
+        flash('Avatar updated.', 'success')
+    flash_errors(form)
+    return redirect(url_for('.change_avatar'))

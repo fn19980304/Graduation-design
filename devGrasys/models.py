@@ -58,6 +58,9 @@ class Student(db.Model, UserMixin):
     def validate_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def is_submitted(self, homework):
+        return self.answers.filter_by(homework=homework).first() is not None
+
 
 class Assistant(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -65,7 +68,24 @@ class Assistant(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     name = db.Column(db.String(30))
 
+    avatar_s = db.Column(db.String(64))
+    avatar_m = db.Column(db.String(64))
+    avatar_l = db.Column(db.String(64))
+    avatar_raw = db.Column(db.String(64))
+
     courses = db.relationship('Course', secondary=course_assistant_table, back_populates='assistants', lazy='dynamic')
+
+    def __init__(self, **kwargs):
+        super(Assistant, self).__init__(**kwargs)
+        self.generate_avatar()
+
+    def generate_avatar(self):
+        avatar = Identicon()
+        filenames = avatar.generate(text=self.name)
+        self.avatar_s = filenames[0]
+        self.avatar_m = filenames[1]
+        self.avatar_l = filenames[2]
+        db.session.commit()
 
     def get_id(self):
         return 'assistant.' + str(self.id)
@@ -83,7 +103,24 @@ class Lecturer(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     name = db.Column(db.String(30))
 
+    avatar_s = db.Column(db.String(64))
+    avatar_m = db.Column(db.String(64))
+    avatar_l = db.Column(db.String(64))
+    avatar_raw = db.Column(db.String(64))
+
     courses = db.relationship('Course', back_populates='lecturer')
+
+    def __init__(self, **kwargs):
+        super(Lecturer, self).__init__(**kwargs)
+        self.generate_avatar()
+
+    def generate_avatar(self):
+        avatar = Identicon()
+        filenames = avatar.generate(text=self.name)
+        self.avatar_s = filenames[0]
+        self.avatar_m = filenames[1]
+        self.avatar_l = filenames[2]
+        db.session.commit()
 
     def get_id(self):
         return 'lecturer.' + str(self.id)
@@ -194,6 +231,18 @@ class Answer(db.Model):
 
     def is_corrected(self):
         return self.correct.first() is not None
+
+    def is_a(self):
+        return self.correct.first().grade is 'A'
+
+    def is_b(self):
+        return self.correct.first().grade is 'B'
+
+    def is_c(self):
+        return self.correct.first().grade is 'C'
+
+    def is_d(self):
+        return self.correct.first().grade is 'D'
 
 
 class Correct(db.Model):

@@ -8,8 +8,8 @@ from flask import render_template, flash, redirect, url_for, Blueprint, send_fro
 from flask_login import login_user, current_user, login_required, logout_user
 
 from devGrasys.models import Student, Course, Homework, Answer, Correct
-from devGrasys.forms.student import RegisterFormStudent, LoginFormStudent, AnswerForm, EditProfileStudentForm, \
-    UploadAvatarStudentForm, CropAvatarStudentForm
+from devGrasys.forms.student import RegisterFormStudent, LoginFormStudent, AnswerForm, EditProfileFormStudent, \
+    UploadAvatarFormStudent, CropAvatarFormStudent
 from devGrasys.utils import redirect_back, flash_errors
 from devGrasys.extensions import db, avatars
 
@@ -19,8 +19,9 @@ student_bp = Blueprint('student', __name__)
 @student_bp.route('', methods=['GET'])
 def index_student():
     if current_user.is_authenticated:
+        student = current_user
         courses = Course.query.all()
-        return render_template('student/index_student.html', courses=courses)
+        return render_template('student/index_student.html', courses=courses, student=student)
     return render_template('student/index_student.html')
 
 
@@ -141,7 +142,7 @@ def view_homework(course_name, homework_title):
 
 @student_bp.route('/settings/profile', methods=['GET', 'POST'])
 def edit_profile():
-    form = EditProfileStudentForm()
+    form = EditProfileFormStudent()
     if form.validate_on_submit():
         current_user.name = form.name.data
         db.session.commit()
@@ -153,14 +154,14 @@ def edit_profile():
 
 @student_bp.route('/settings/avatar')
 def change_avatar():
-    upload_form = UploadAvatarStudentForm()
-    crop_form = CropAvatarStudentForm()
+    upload_form = UploadAvatarFormStudent()
+    crop_form = CropAvatarFormStudent()
     return render_template('student/settings/change_avatar.html', upload_form=upload_form, crop_form=crop_form)
 
 
 @student_bp.route('/settings/avatar/upload', methods=['POST'])
 def upload_avatar():
-    form = UploadAvatarStudentForm()
+    form = UploadAvatarFormStudent()
     if form.validate_on_submit():
         image = form.image.data
         filename = avatars.save_avatar(image)
@@ -173,7 +174,7 @@ def upload_avatar():
 
 @student_bp.route('/settings/avatar/crop', methods=['POST'])
 def crop_avatar():
-    form = CropAvatarStudentForm()
+    form = CropAvatarFormStudent()
     if form.validate_on_submit():
         x = form.x.data
         y = form.y.data

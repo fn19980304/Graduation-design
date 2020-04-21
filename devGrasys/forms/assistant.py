@@ -6,7 +6,8 @@
 
 from flask_wtf import FlaskForm
 from flask_ckeditor import CKEditorField
-from wtforms import StringField, SubmitField, PasswordField, BooleanField, SelectField
+from flask_wtf.file import FileField, FileAllowed, FileRequired
+from wtforms import StringField, SubmitField, PasswordField, BooleanField, SelectField, HiddenField
 from wtforms.validators import DataRequired, Length, Regexp, EqualTo
 from wtforms import ValidationError
 
@@ -42,3 +43,24 @@ class CorrectHomeworkForm(FlaskForm):
                                  ('D', 'D - Unqualified')],
                         )
     submit = SubmitField()
+
+
+class EditProfileFormAssistant(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(1, 30)])
+    submit = SubmitField()
+
+
+class UploadAvatarFormAssistant(FlaskForm):
+    image = FileField('Upload', validators=[
+        FileRequired(),
+        FileAllowed(['jpg', 'png'], 'The file format should be .jpg or .png.')
+    ])
+    submit = SubmitField()
+
+
+class CropAvatarFormAssistant(FlaskForm):
+    x = HiddenField()
+    y = HiddenField()
+    w = HiddenField()
+    h = HiddenField()
+    submit = SubmitField('Crop and Update')
