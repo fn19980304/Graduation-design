@@ -6,7 +6,8 @@
 
 from flask_wtf import FlaskForm
 from flask_ckeditor import CKEditorField
-from wtforms import StringField, SubmitField, PasswordField, BooleanField, TextAreaField, ValidationError
+from flask_wtf.file import FileField, FileAllowed, FileRequired
+from wtforms import StringField, SubmitField, PasswordField, BooleanField, TextAreaField, ValidationError, HiddenField
 from wtforms.validators import DataRequired, Length, Regexp, EqualTo
 from wtforms.fields.html5 import DateField
 
@@ -57,5 +58,26 @@ class AdminCourseForm(FlaskForm):
 class AssignHomeworkForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(1, 30)])
     description = CKEditorField('Description', validators=[DataRequired()])
-    deadline=DateField('Deadline',format='%Y-%m-%d')
+    deadline = DateField('Deadline', format='%Y-%m-%d')
     submit = SubmitField('Assign')
+
+
+class EditProfileFormLecturer(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(1, 30)])
+    submit = SubmitField()
+
+
+class UploadAvatarFormLecturer(FlaskForm):
+    image = FileField('Upload', validators=[
+        FileRequired(),
+        FileAllowed(['jpg', 'png'], 'The file format should be .jpg or .png.')
+    ])
+    submit = SubmitField()
+
+
+class CropAvatarFormLecturer(FlaskForm):
+    x = HiddenField()
+    y = HiddenField()
+    w = HiddenField()
+    h = HiddenField()
+    submit = SubmitField('Crop and Update')

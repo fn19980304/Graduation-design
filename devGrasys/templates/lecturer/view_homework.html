@@ -9,10 +9,12 @@
             <h3>The assignment:</h3>
             <h4>(title - starting time - deadline)</h4>
             {% for homework in homework_group %}
-                <p><span class="oi oi-clock"></span> {{ homework.title }}
+                <a class="dead-link"
+                   href="{{ url_for('lecturer.check_homework', course_name=course.name,homework_title=homework.title) }}">
+                    <span class="oi oi-calendar"></span> {{ homework.title }}
                     - {{ moment(homework.timestamp).format('LL') }}
                     - {{ moment(homework.deadline).format('LL') }}
-                </p>
+                </a>
             {% endfor %}
         </div>
     </div>

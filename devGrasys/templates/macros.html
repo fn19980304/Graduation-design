@@ -1,0 +1,37 @@
+{% macro student_card(student) %}
+    <div class="user-card text-center">
+        <img class="rounded avatar-m" src="{{ url_for('student.get_avatar', filename=student.avatar_m) }}">
+        <h6>
+            {{ student.name }}
+        </h6>
+    </div>
+{% endmacro %}
+
+{% macro assistant_card(assistant) %}
+    <div class="user-card text-center">
+        <img class="rounded avatar-m" src="{{ url_for('assistant.get_avatar', filename=assistant.avatar_m) }}">
+        <h6>
+            {{ assistant.name }}
+        </h6>
+    </div>
+{% endmacro %}
+
+{% macro lecturer_card(lecturer) %}
+    <div class="user-card text-center">
+        <img class="rounded avatar-m" src="{{ url_for('lecturer.get_avatar', filename=lecturer.avatar_m) }}">
+        <h6>
+            {{ lecturer.name }}
+        </h6>
+    </div>
+{% endmacro %}
+
+{% macro student_check_card(course,homework,student) %}
+    <div class="user-card text-center">
+        <a href="{{ url_for('lecturer.check_student', course_name=course.name, homework_title=homework.title, student_name=student.name) }}">
+            <img class="rounded avatar-m" src="{{ url_for('student.get_avatar', filename=student.avatar_m) }}">
+        </a>
+        <h6>
+            {{ student.name }}
+        </h6>
+    </div>
+{% endmacro %}

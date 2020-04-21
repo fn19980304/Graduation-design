@@ -8,11 +8,11 @@ from datetime import datetime
 from flask import render_template, flash, redirect, url_for, Blueprint, send_from_directory, current_app, request
 from flask_login import login_required, login_user, logout_user, current_user
 
-from devGrasys.models import Lecturer, Course, Homework
+from devGrasys.models import Lecturer, Course, Homework, Student, Answer
 from devGrasys.forms.lecturer import RegisterFormLecturer, LoginFormLecturer, CreateCourseForm, AdminCourseForm, \
-    AssignHomeworkForm
-from devGrasys.utils import redirect_back
-from devGrasys.extensions import db
+    AssignHomeworkForm, EditProfileFormLecturer, CropAvatarFormLecturer, UploadAvatarFormLecturer
+from devGrasys.utils import redirect_back, flash_errors
+from devGrasys.extensions import db, avatars
 
 lecturer_bp = Blueprint('lecturer', __name__)
 
@@ -156,3 +156,77 @@ def view_homework(course_name):
         return redirect(url_for('lecturer.view_homework', course_name=course.name))
     return render_template('lecturer/view_homework.html', course=course, homework_group=homework_group, form=form,
                            current_time=current_time)
+
+
+@lecturer_bp.route('/select/<course_name>/<homework_title>', methods=['GET'])
+def check_homework(course_name, homework_title):
+    course = Course.query.filter_by(name=course_name).first_or_404()
+    students = course.students
+    homework = Homework.query.filter_by(course=course).filter_by(title=homework_title).first_or_404()
+    answers = homework.answers
+    submitted_number = 0
+    for student in students:
+        if student.is_submitted(homework=homework):
+            submitted_number += 1
+    return render_template('lecturer/check_homework.html', course=course, homework=homework, students=students,
+                           answers=answers,
+                           submitted_number=submitted_number)
+
+
+@lecturer_bp.route('/select/<course_name>/<homework_title>/<student_name>', methods=['GET'])
+def check_student(course_name, homework_title, student_name):
+    course = Course.query.filter_by(name=course_name).first_or_404()
+    homework = Homework.query.filter_by(course=course).filter_by(title=homework_title).first_or_404()
+    student = Student.query.filter_by(name=student_name).first_or_404()
+    answer = Answer.query.filter_by(homework=homework).filter_by(student=student).first_or_404()
+    return render_template('lecturer/check_student.html', homework=homework, answer=answer, student=student)
+
+
+@lecturer_bp.route('/settings/profile', methods=['GET', 'POST'])
+def edit_profile():
+    form = EditProfileFormLecturer()
+    if form.validate_on_submit():
+        current_user.name = form.name.data
+        db.session.commit()
+        flash('Profile updated.', 'success')
+        return redirect(url_for('lecturer.index_lecturer'))
+    form.name.data = current_user.name
+    return render_template('lecturer/settings/edit_profile.html', form=form)
+
+
+@lecturer_bp.route('/settings/avatar')
+def change_avatar():
+    upload_form = UploadAvatarFormLecturer()
+    crop_form = CropAvatarFormLecturer()
+    return render_template('lecturer/settings/change_avatar.html', upload_form=upload_form, crop_form=crop_form)
+
+
+@lecturer_bp.route('/settings/avatar/upload', methods=['POST'])
+def upload_avatar():
+    form = UploadAvatarFormLecturer()
+    if form.validate_on_submit():
+        image = form.image.data
+        filename = avatars.save_avatar(image)
+        current_user.avatar_raw = filename
+        db.session.commit()
+        flash('Image uploaded, please crop.', 'success')
+    flash_errors(form)
+    return redirect(url_for('.change_avatar'))
+
+
+@lecturer_bp.route('/settings/avatar/crop', methods=['POST'])
+def crop_avatar():
+    form = CropAvatarFormLecturer()
+    if form.validate_on_submit():
+        x = form.x.data
+        y = form.y.data
+        w = form.w.data
+        h = form.h.data
+        filenames = avatars.crop_avatar(current_user.avatar_raw, x, y, w, h)
+        current_user.avatar_s = filenames[0]
+        current_user.avatar_m = filenames[1]
+        current_user.avatar_l = filenames[2]
+        db.session.commit()
+        flash('Avatar updated.', 'success')
+    flash_errors(form)
+    return redirect(url_for('.change_avatar'))

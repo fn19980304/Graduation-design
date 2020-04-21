@@ -1,12 +1,13 @@
 {% extends 'lecturer/view_course.html' %}
 {% from 'bootstrap/pagination.html' import render_pagination %}
+{% from 'macros.html' import student_card with context %}
 
 {% block title %}{{ course.name }} - Students{% endblock %}
 
 {% block view_content %}
     {% if course.students.count() != 0 %}
         {% for student in course.students.all() %}
-            <p>{{ student.name }}</p>
+            {{ student_card(student=student) }}
         {% endfor %}
     {% else %}
         <div class="tip">

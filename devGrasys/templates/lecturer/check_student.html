@@ -1,0 +1,15 @@
+{% extends 'lecturer/base.html' %}
+
+{% block title %}Check - {{ homework.title }} - {{ student.name }} - Lecturer{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-8">
+            <h3>Student name:</h3>
+            <p>{{ student.name }}</p>
+            <hr/>
+            <h3>Answer content:</h3>
+            <p>{{ answer.body | safe }}</p>
+        </div>
+    </div>
+{% endblock %}

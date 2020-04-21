@@ -1,12 +1,13 @@
 {% extends 'lecturer/view_course.html' %}
 {% from 'bootstrap/pagination.html' import render_pagination %}
+{% from 'macros.html' import assistant_card with context %}
 
 {% block title %}{{ course.name }} - Assistants{% endblock %}
 
 {% block view_content %}
     {% if course.assistants.count() != 0 %}
         {% for assistant in course.assistants.all() %}
-            <p>{{ assistant.name }}</p>
+            {{ assistant_card(assistant=assistant) }}
         {% endfor %}
     {% else %}
         <div class="tip">
