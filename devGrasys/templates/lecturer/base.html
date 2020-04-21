@@ -28,13 +28,13 @@
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
                            aria-expanded="false">
                             <img class="avatar-xs"
-                                 src="{{ url_for('static', filename='images/lecturer_reg.jpg') }}">
+                                 src="{{ url_for('lecturer.get_avatar', filename=current_user.avatar_s) }}">
                             <span class="caret"></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" role="menu">
                             <h6 class="dropdown-header">Logged in as {{ current_user.name }}</h6>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ url_for('.index_lecturer') }}">
+                            <a class="dropdown-item" href="{{ url_for('lecturer.edit_profile') }}">
                                 <span class="oi oi-cog"></span> Settings
                             </a>
                             <a class="dropdown-item" href="{{ url_for('lecturer.logout_lecturer') }}">

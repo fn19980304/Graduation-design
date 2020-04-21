@@ -9,19 +9,47 @@
             <div class="col-md-8">
                 <div class="card mb-3 w-100 bg-light">
                     <div class="card-header">
-                        <h4>{{ courses| length }} The courses:</h4>
-                        <p>(course name - course lecturer - course introduction)</p>
+                        <img class="rounded img-fluid avatar-s"
+                             src="{{ url_for('assistant.get_avatar', filename=current_user.avatar_m) }}">
+                        <span class="card-title">{{ current_user.name }} -
+                            <span class="oi oi-person"> Assistant</span>
+                        </span>
                     </div>
-                    {% for course in courses %}
-                        <div class="card-body">
-                            <a class="dead-link"
-                               href="{{ url_for('assistant.view_course', course_name=course.name) }}">
-                                <img src="{{ url_for('assistant.get_avatar', filename=course.avatar_s) }}">
-                                {{ course.name }} - {{ course.lecturer_name }} - {{ course.intro }}
-                            </a>
+                    {% if courses|length ==0 %}
+                        <div class="tip">
+                            <h3>No course yet!</h3>
+                            <h3>Please wait.</h3>
                         </div>
-                        <hr/>
-                    {% endfor %}
+                    {% else %}
+                        <div class="card-body">
+                            <h3>The courses you can join:</h3>
+                            <p>(course name - course lecturer - course introduction)</p>
+                            {% for course in courses %}
+                                {% if not course.assistant_is_joined(assistant) %}
+                                    <a class="dead-link"
+                                       href="{{ url_for('assistant.view_course', course_name=course.name) }}">
+                                        <img src="{{ url_for('assistant.get_avatar', filename=course.avatar_s) }}">
+                                        {{ course.name }} - {{ course.lecturer_name }} - {{ course.intro }}
+                                    </a>
+                                    <hr/>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="card-body">
+                            <h3>The courses you have already joined:</h3>
+                            <p>(course name - course lecturer - course introduction)</p>
+                            {% for course in courses %}
+                                {% if course.assistant_is_joined(assistant) %}
+                                    <a class="dead-link"
+                                       href="{{ url_for('assistant.view_course', course_name=course.name) }}">
+                                        <img src="{{ url_for('assistant.get_avatar', filename=course.avatar_s) }}">
+                                        {{ course.name }} - {{ course.lecturer_name }} - {{ course.intro }}
+                                    </a>
+                                    <hr/>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

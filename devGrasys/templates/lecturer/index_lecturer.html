@@ -9,19 +9,31 @@
             <div class="col-md-8">
                 <div class="card mb-3 w-100 bg-light">
                     <div class="card-header">
+                        <img class="rounded img-fluid avatar-s"
+                             src="{{ url_for('assistant.get_avatar', filename=current_user.avatar_m) }}">
+                        <span class="card-title">{{ current_user.name }} -
+                            <span class="oi oi-person"> Lecturer</span>
+                        </span>
+                    </div>
+                    <div class="card-body">
                         <h4>{{ courses| length }} Your courses:</h4>
                         <p>(course name - course introduction)</p>
+                        {% if courses|length ==0 %}
+                            <div class="tip">
+                                <h3>No course yet!</h3>
+                                <h3>Please go to create your course.</h3>
+                            </div>
+                        {% else %}
+                            {% for course in courses %}
+                                <a class="dead-link"
+                                   href="{{ url_for('lecturer.view_course', course_name=course.name) }}">
+                                    <img src="{{ url_for('lecturer.get_avatar', filename=course.avatar_s) }}">
+                                    {{ course.name }} - {{ course.intro }}
+                                </a>
+                                <hr/>
+                            {% endfor %}
+                        {% endif %}
                     </div>
-                    {% for course in courses %}
-                        <div class="card-body">
-                            <a class="dead-link"
-                               href="{{ url_for('lecturer.view_course', course_name=course.name) }}">
-                                <img src="{{ url_for('lecturer.get_avatar', filename=course.avatar_s) }}">
-                                {{ course.name }} - {{ course.intro }}
-                            </a>
-                        </div>
-                        <hr/>
-                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -38,10 +50,12 @@
                         </div>
                         <div class="card-body">
                             <div class="navbar-nav ml-auto">
-                                <a class="btn btn-outline-dark" href="{{ url_for('lecturer.register_lecturer') }}">Join Now</a>
+                                <a class="btn btn-outline-dark" href="{{ url_for('lecturer.register_lecturer') }}">Join
+                                    Now</a>
                             </div>
                             <hr>
-                            <small>Already have an account? <a href="{{ url_for('lecturer.login_lecturer') }}">Click here to log
+                            <small>Already have an account? <a href="{{ url_for('lecturer.login_lecturer') }}">Click
+                                here to log
                                 in.</a>
                             </small>
                         </div>

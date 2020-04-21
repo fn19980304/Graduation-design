@@ -11,7 +11,7 @@
             {% for homework in homework_group %}
                 <a class="dead-link"
                    href="{{ url_for('student.view_homework', course_name=course.name,homework_title=homework.title) }}">
-                    <span class="oi oi-clock"></span> {{ homework.title }}
+                    <span class="oi oi-calendar"></span> {{ homework.title }}
                     - {{ moment(homework.timestamp).format('LL') }}
                     - {{ moment(homework.deadline).format('LL') }}
                 </a>

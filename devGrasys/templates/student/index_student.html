@@ -20,32 +20,33 @@
                         </div>
                     {% else %}
                         <div class="card-body">
+                            <h3>The courses you can join:</h3>
+                            <p>(course name - course lecturer - course introduction)</p>
                             {% for course in courses %}
                                 {% if not course.student_is_joined(student) %}
-                                    <h3>{{ courses| length }} The courses you can join:</h3>
-                                    <p>(course name - course lecturer - course introduction)</p>
                                     <a class="dead-link"
                                        href="{{ url_for('student.view_course', course_name=course.name) }}">
                                         <img src="{{ url_for('student.get_avatar', filename=course.avatar_s) }}">
                                         {{ course.name }} - {{ course.lecturer_name }} - {{ course.intro }}
                                     </a>
+                                    <hr/>
                                 {% endif %}
                             {% endfor %}
                         </div>
                         <div class="card-body">
+                            <h3>The courses you have already joined:</h3>
+                            <p>(course name - course lecturer - course introduction)</p>
                             {% for course in courses %}
                                 {% if course.student_is_joined(student) %}
-                                    <h3>{{ courses| length }} The courses you have already joined:</h3>
-                                    <p>(course name - course lecturer - course introduction)</p>
                                     <a class="dead-link"
                                        href="{{ url_for('student.view_course', course_name=course.name) }}">
                                         <img src="{{ url_for('student.get_avatar', filename=course.avatar_s) }}">
                                         {{ course.name }} - {{ course.lecturer_name }} - {{ course.intro }}
                                     </a>
+                                    <hr/>
                                 {% endif %}
                             {% endfor %}
                         </div>
-                        <hr/>
                     {% endif %}
                 </div>
             </div>
