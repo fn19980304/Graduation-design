@@ -141,6 +141,8 @@ class Course(db.Model, UserMixin):
     avatar_s = db.Column(db.String(64))
     avatar_m = db.Column(db.String(64))
     avatar_l = db.Column(db.String(64))
+    avatar_raw = db.Column(db.String(64))
+
 
     # 讲师对课程：一对多
     lecturer_id = db.Column(db.Integer, db.ForeignKey('lecturer.id'))

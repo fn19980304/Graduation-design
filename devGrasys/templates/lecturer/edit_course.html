@@ -1,12 +1,11 @@
 {% extends 'lecturer/base.html' %}
 {% from 'bootstrap/form.html' import render_form %}
-{% from 'bootstrap/nav.html' import render_nav_item %}
 
-{% block title %}Admin Course{% endblock %}
+{% block title %}Edit Profile{% endblock %}
 
 {% block content %}
     <div class="card w-100 bg-light">
-        <h3 class="card-header">Admin Course</h3>
+        <h3 class="card-header">Edit Profile</h3>
         <div class="card-body">
             {{ render_form(form) }}
         </div>

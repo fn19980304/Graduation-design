@@ -117,8 +117,8 @@ def show_assistants(course_name):
                            assistants=assistants)
 
 
-@lecturer_bp.route('/<course_name>/admin/profile', methods=['GET', 'POST'])
-def admin_course(course_name):
+@lecturer_bp.route('/<course_name>/admin', methods=['GET', 'POST'])
+def edit_course(course_name):
     form = AdminCourseForm()
     course = Course.query.filter_by(name=course_name).first_or_404()
     if form.validate_on_submit():
@@ -129,7 +129,48 @@ def admin_course(course_name):
         return redirect(url_for('lecturer.view_course', course_name=course.name))
     form.name.data = course.name
     form.intro.data = course.intro
-    return render_template('lecturer/admin_course.html', form=form)
+    return render_template('lecturer/edit_course.html', form=form)
+
+
+@lecturer_bp.route('/<course_name>/picture')
+def change_picture(course_name):
+    course = Course.query.filter_by(name=course_name).first_or_404()
+    upload_form = UploadAvatarFormLecturer()
+    crop_form = CropAvatarFormLecturer()
+    return render_template('lecturer/change_picture.html', course=course, upload_form=upload_form, crop_form=crop_form)
+
+
+@lecturer_bp.route('/<course_name>/picture/upload', methods=['POST'])
+def upload_picture(course_name):
+    course = Course.query.filter_by(name=course_name).first_or_404()
+    form = UploadAvatarFormLecturer()
+    if form.validate_on_submit():
+        image = form.image.data
+        filename = avatars.save_avatar(image)
+        course.avatar_raw = filename
+        db.session.commit()
+        flash('Image uploaded, please crop.', 'success')
+    flash_errors(form)
+    return redirect(url_for('lecturer.change_picture', course_name=course.name))
+
+
+@lecturer_bp.route('/<course_name>/picture/crop', methods=['POST'])
+def crop_picture(course_name):
+    course = Course.query.filter_by(name=course_name).first_or_404()
+    form = CropAvatarFormLecturer()
+    if form.validate_on_submit():
+        x = form.x.data
+        y = form.y.data
+        w = form.w.data
+        h = form.h.data
+        filenames = avatars.crop_avatar(course.avatar_raw, x, y, w, h)
+        course.avatar_s = filenames[0]
+        course.avatar_m = filenames[1]
+        course.avatar_l = filenames[2]
+        db.session.commit()
+        flash('Picture updated.', 'success')
+    flash_errors(form)
+    return redirect(url_for('lecturer.change_picture', course_name=course.name))
 
 
 @lecturer_bp.route('/select', methods=['GET'])
