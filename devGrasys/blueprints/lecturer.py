@@ -96,6 +96,15 @@ def view_course(course_name):
     return render_template('lecturer/view_course.html', course=course)
 
 
+@lecturer_bp.route('/<course_name>/end', methods=['POST'])
+def end_course(course_name):
+    course = Course.query.filter_by(name=course_name).first_or_404()
+    db.session.delete(course)
+    db.session.commit()
+    flash('Course ended.', 'success')
+    return redirect(url_for('lecturer.index_lecturer'))
+
+
 @lecturer_bp.route('/<course_name>/students')
 def show_students(course_name):
     course = Course.query.filter_by(name=course_name).first_or_404()

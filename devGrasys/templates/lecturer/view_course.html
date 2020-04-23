@@ -20,6 +20,10 @@
                 <a class="btn btn-outline-dark btn-group-sm"
                    href="{{ url_for('lecturer.change_picture',course_name=course.name ) }}">Picture
                 </a>
+                <form class="inline" method="post"
+                      action="{{ url_for('lecturer.end_course', course_name=course.name, next=request.full_path) }}">
+                    <button type="submit" class="btn btn-danger btn-group-sm">End</button>
+                </form>
             </div>
         </div>
     </div>
