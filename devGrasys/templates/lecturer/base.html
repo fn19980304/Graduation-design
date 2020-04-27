@@ -14,11 +14,11 @@
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <div class="navbar-nav mr-auto">
                     {% if current_user.is_authenticated %}
-                        {{ render_nav_item('lecturer.index_lecturer', 'Home') }}
-                        {{ render_nav_item('lecturer.create_course', 'Create') }}
-                        {{ render_nav_item('lecturer.select_course', 'Assign / Check') }}
+                        {{ render_nav_item('lecturer.index_lecturer', '主页') }}
+                        {{ render_nav_item('lecturer.create_course', '创建课程') }}
+                        {{ render_nav_item('lecturer.select_course', '布置 / 检查') }}
                     {% else %}
-                        {{ render_nav_item('lecturer.index_lecturer', 'Home') }}
+                        {{ render_nav_item('lecturer.index_lecturer', '主页') }}
                     {% endif %}
                 </div>
             </div>
@@ -32,13 +32,13 @@
                             <span class="caret"></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" role="menu">
-                            <h6 class="dropdown-header">Logged in as {{ current_user.name }}</h6>
+                            <h6 class="dropdown-header">以 {{ current_user.name }} 登录</h6>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ url_for('lecturer.edit_profile') }}">
-                                <span class="oi oi-cog"></span> Settings
+                                <span class="oi oi-cog"></span> 个人设置
                             </a>
                             <a class="dropdown-item" href="{{ url_for('lecturer.logout_lecturer') }}">
-                                <span class="oi oi-power-standby"></span> Logout
+                                <span class="oi oi-power-standby"></span> 注销
                             </a>
                         </div>
                     </div>

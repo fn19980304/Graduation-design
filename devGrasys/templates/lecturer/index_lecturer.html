@@ -1,7 +1,7 @@
 {% extends 'lecturer/base.html' %}
 {% from 'bootstrap/form.html' import render_form %}
 
-{% block title %}Lecturer{% endblock %}
+{% block title %}讲师{% endblock %}
 
 {% block content %}
     {% if current_user.is_authenticated %}
@@ -12,16 +12,16 @@
                         <img class="rounded img-fluid avatar-s"
                              src="{{ url_for('lecturer.get_avatar', filename=current_user.avatar_m) }}">
                         <span class="card-title">{{ current_user.name }} -
-                            <span class="oi oi-person"> Lecturer</span>
+                            <span class="oi oi-person"> 讲师</span>
                         </span>
                     </div>
                     <div class="card-body">
-                        <h4>{{ courses| length }} Your courses:</h4>
-                        <p>(course name - course introduction)</p>
+                        <h4>{{ courses| length }} 你的课程:</h4>
+                        <p>(课程名称 - 课程介绍)</p>
                         {% if courses|length ==0 %}
                             <div class="tip">
-                                <h3>No course yet!</h3>
-                                <h3>Please go to create your course.</h3>
+                                <h3>还没有课程！</h3>
+                                <h3>请创建你的课程。</h3>
                             </div>
                         {% else %}
                             {% for course in courses %}
@@ -46,17 +46,15 @@
                 <div class="col-md-4">
                     <div class="card mb-3 w-100 bg-light">
                         <div class="card-header">
-                            <h4>Welcome to use!</h4>
+                            <h4>欢迎使用！</h4>
                         </div>
                         <div class="card-body">
                             <div class="navbar-nav ml-auto">
-                                <a class="btn btn-outline-dark" href="{{ url_for('lecturer.register_lecturer') }}">Join
-                                    Now</a>
+                                <a class="btn btn-outline-dark" href="{{ url_for('lecturer.register_lecturer') }}">注册</a>
                             </div>
                             <hr>
-                            <small>Already have an account? <a href="{{ url_for('lecturer.login_lecturer') }}">Click
-                                here to log
-                                in.</a>
+                            <small>已经注册了账户？<a href="{{ url_for('lecturer.login_lecturer') }}">点击此处登录
+                            </a>
                             </small>
                         </div>
                     </div>

@@ -2,7 +2,7 @@
 {% from 'bootstrap/pagination.html' import render_pagination %}
 {% from 'macros.html' import assistant_card with context %}
 
-{% block title %}{{ course.name }} - Assistants{% endblock %}
+{% block title %}{{ course.name }} - 助教{% endblock %}
 
 {% block view_content %}
     {% if course.assistants.count() != 0 %}
@@ -11,7 +11,7 @@
         {% endfor %}
     {% else %}
         <div class="tip">
-            <h3>No assistants.</h3>
+            <h3>尚无助教加入。</h3>
         </div>
     {% endif %}
 {% endblock %}

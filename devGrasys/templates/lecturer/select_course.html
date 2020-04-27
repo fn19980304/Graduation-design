@@ -1,15 +1,15 @@
 {% extends 'lecturer/base.html' %}
 {% from 'bootstrap/form.html' import render_form %}
 
-{% block title %}Select Course - Lecturer{% endblock %}
+{% block title %}选择课程 - 讲师{% endblock %}
 
 {% block content %}
     <div class="row justify-content-md-center">
         <div class="col-md-8">
             <div class="card mb-3 w-100 bg-light">
                 <div class="card-header">
-                    <h4>Please select the course:</h4>
-                    <p>(course name - course introduction)</p>
+                    <h4>请选择你的课程：</h4>
+                    <p>(课程名称 - 课程介绍)</p>
                 </div>
                 {% for course in courses %}
                     <div class="card-body">

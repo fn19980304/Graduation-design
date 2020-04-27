@@ -1,7 +1,7 @@
 {% extends 'lecturer/base.html' %}
 {% from 'bootstrap/form.html' import render_form %}
 
-{% block title %}Change Picture{% endblock %}
+{% block title %}修改照片{% endblock %}
 
 {% block head %}
     {{ super() }}
@@ -10,11 +10,11 @@
 
 {% block content %}
     <div class="card w-100 bg-light">
-        <h3 class="card-header">Change Picture</h3>
+        <h3 class="card-header">修改照片</h3>
         <div class="card-body">
             {{ render_form(upload_form, action=url_for('lecturer.upload_picture',course_name=course.name)) }}
             <small class="text-muted">
-                Your file's size must be less than 3 MB, the allowed formats are png and jpg.
+                你的文件大小不得超过 3 MB,允许提交的文件格式为 png 和 jpg。
             </small>
         </div>
         <div class="card-body">

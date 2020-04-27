@@ -1,31 +1,32 @@
 {% extends 'base.html' %}
 {% from 'bootstrap/form.html' import render_form %}
 
-{% block title %}Lecturer - Register{% endblock %}
+{% block title %}讲师 - 注册{% endblock %}
 
 {% block content %}
     <div class="jumbotron">
         <div class="row">
             <div class="col-md-8">
-                <h3>For lecturers , you can:</h3>
-                <p>Create your class.</p>
-                <p>Assign a new homework.</p>
-                <p>Check the overall completion of your class.</p>
+                <h3>讲师们可以使用本系统完成：</h3>
+                <p><span class="oi oi-people"></span> 创建你的课程</p>
+                <p><span class="oi oi-calendar"></span> 发布一个新的作业</p>
+                <p><span class="oi oi-check"></span> 查看该课程作业完成的总体情况</p>
                 <hr />
-                <p>P.S. Your UserID should begin with L ,followed by 9 digits.</p>
+                <p><span class="oi oi-warning"></span> 注：你的ID必须以L开头，后接9位数字</p>
                 <img src="{{ url_for('static', filename='images/lecturer_reg.jpg') }}" class="rounded img-fluid">
             </div>
             <div class="col-md-4">
                 <div class="card mb-3 w-100 bg-light">
                     <div class="card-header">
-                        <h4>Lecturer Account</h4>
+                        <h4>讲师账户</h4>
                     </div>
                     <div class="card-body">
                         <div class="navbar-nav ml-auto">
                             {{ render_form(form) }}
                         </div>
                         <hr>
-                        <small>Already have an account? <a href="{{ url_for('.login_lecturer') }}">Click here to log in.</a>
+                        <small>已经注册了账户？<a href="{{ url_for('lecturer.login_lecturer') }}">点击此处登录
+                        </a>
                         </small>
                     </div>
                 </div>

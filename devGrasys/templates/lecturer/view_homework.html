@@ -1,13 +1,13 @@
 {% extends 'lecturer/base.html' %}
 {% from 'bootstrap/form.html' import render_form %}
 
-{% block title %}View - {{ course.name }} Homework - Lecturer{% endblock %}
+{% block title %}查看 - {{ course.name }} 作业 - 讲师{% endblock %}
 
 {% block content %}
     <div class="row">
         <div class="col-md-8">
-            <h3>The assignment:</h3>
-            <h4>(title - starting time - deadline)</h4>
+            <h3>已布置作业：</h3>
+            <h4>(标题 - 起始时间 - 截止日期)</h4>
             {% for homework in homework_group %}
                 <a class="dead-link"
                    href="{{ url_for('lecturer.check_homework', course_name=course.name,homework_title=homework.title) }}">
@@ -22,7 +22,7 @@
     <hr/>
     <div class="row">
         <div class="col-md-8">
-            <h3>New assignment:</h3>
+            <h3>布置新的作业：</h3>
             {{ render_form(form) }}
         </div>
     </div>

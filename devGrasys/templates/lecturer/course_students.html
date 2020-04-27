@@ -2,7 +2,7 @@
 {% from 'bootstrap/pagination.html' import render_pagination %}
 {% from 'macros.html' import student_card with context %}
 
-{% block title %}{{ course.name }} - Students{% endblock %}
+{% block title %}{{ course.name }} - 学生{% endblock %}
 
 {% block view_content %}
     {% if course.students.count() != 0 %}
@@ -11,7 +11,7 @@
         {% endfor %}
     {% else %}
         <div class="tip">
-            <h3>No students.</h3>
+            <h3>尚无学生加入。</h3>
         </div>
     {% endif %}
 {% endblock %}

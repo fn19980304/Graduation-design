@@ -30,7 +30,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <div class="navbar-nav mr-auto">
-                    {{ render_nav_item('main.index', 'Home') }}
+                    {{ render_nav_item('main.index', '主页') }}
                 </div>
             </div>
         </div>
@@ -50,12 +50,12 @@
             <footer>
                 <p class="float-left">
                     <small>&copy; 2020
-                        <a href="http://www.hust.edu.cn/" title="Supported by HUST">HUST</a> -
-                        <a href="https://github.com/fn19980304" title="The author">Jifan Jiang</a>
+                        <a href="http://www.hust.edu.cn/" title="Supported by HUST">华中科技大学</a> -
+                        <a href="https://github.com/fn19980304" title="The author">蒋济帆</a>
                     </small>
                 </p>
                 <p class="float-right">
-                    <small>Develop for the graduation design.</small>
+                    <small>2016级本科毕业课程设计</small>
                 </p>
             </footer>
         {% endblock %}
@@ -69,7 +69,7 @@
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     {{ moment.include_jquery() }}
     {{ moment.include_moment(local_js=url_for('static', filename='js/moment-with-locales.min.js')) }}
-    {{ moment.locale('en') }}
+    {{ moment.locale('zh-cn') }}
 {% endblock %}
 
 </body>

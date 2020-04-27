@@ -1,7 +1,7 @@
 {% extends 'lecturer/base.html' %}
 {% from 'bootstrap/form.html' import render_form %}
 
-{% block title %}View - {{ course.name }} - Lecturer{% endblock %}
+{% block title %}查看 - {{ course.name }} - 讲师{% endblock %}
 
 {% block content %}
     <div class="row">
@@ -15,14 +15,14 @@
             <h4><small class="text-muted">{{ course.intro }}</small></h4>
             <div class="float-right">
                 <a class="btn btn-outline-dark btn-group-sm"
-                   href="{{ url_for('lecturer.edit_course',course_name=course.name ) }}">Admin
+                   href="{{ url_for('lecturer.edit_course',course_name=course.name ) }}">管理信息
                 </a>
                 <a class="btn btn-outline-dark btn-group-sm"
-                   href="{{ url_for('lecturer.change_picture',course_name=course.name ) }}">Picture
+                   href="{{ url_for('lecturer.change_picture',course_name=course.name ) }}">修改图片
                 </a>
                 <form class="inline" method="post"
                       action="{{ url_for('lecturer.end_course', course_name=course.name, next=request.full_path) }}">
-                    <button type="submit" class="btn btn-danger btn-group-sm">End</button>
+                    <button type="submit" class="btn btn-danger btn-group-sm">结课</button>
                 </form>
             </div>
         </div>
@@ -30,8 +30,8 @@
 
     <div class="user-nav">
         <ul class="nav nav-tabs">
-            {{ render_nav_item('lecturer.show_students', 'Student', course_name=course.name) }}
-            {{ render_nav_item('lecturer.show_assistants', 'Assistant', course_name=course.name) }}
+            {{ render_nav_item('lecturer.show_students', '学生', course_name=course.name) }}
+            {{ render_nav_item('lecturer.show_assistants', '助教', course_name=course.name) }}
         </ul>
         <div class="row">
             <div class="col-md-12">

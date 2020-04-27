@@ -2,7 +2,7 @@
 {% from 'macros.html' import student_card with context %}
 {% from 'macros.html' import student_check_card with context %}
 
-{% block title %}Check - {{ homework.title }} - Lecturer{% endblock %}
+{% block title %}检查 - {{ homework.title }} - 讲师{% endblock %}
 
 {% block content %}
     <div class="row">
@@ -14,10 +14,10 @@
                 - {{ moment(homework.deadline).format('LL') }}
             </h5>
             <hr/>
-            <h3>Submission status:</h3>
-            <p><span class="oi oi-task"></span> Number of submitted / Total number: {{ submitted_number }}
+            <h3>提交情况：</h3>
+            <p><span class="oi oi-task"></span> 已提交人数 / 总人数： {{ submitted_number }}
                 / {{ students.count() }}</p>
-            <p><span class="oi oi-x"></span> Unsubmitted students:</p>
+            <p><span class="oi oi-x"></span> 未提交学生：</p>
             <div class="card bg-light">
                 <div class="card-body">
                     {% for student in students %}
@@ -28,7 +28,7 @@
                 </div>
             </div>
             <hr/>
-            <h3>Completion status:</h3>
+            <h3>完成情况：</h3>
             <p>
                 <span class="oi oi-star"></span>
                 <span class="oi oi-star"></span>

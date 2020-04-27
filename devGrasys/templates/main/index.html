@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% from 'bootstrap/pagination.html' import render_pagination %}
 
-{% block title %}Home{% endblock %}
+{% block title %}索引页{% endblock %}
 
 {% block content %}
 <div class="jumbotron">
@@ -10,14 +10,14 @@
             <img src="{{ url_for('static', filename='images/index.jfif') }}" class="rounded img-fluid">
         </div>
         <div class="col-md-4 align-self-center">
-            <h1>Web system</h1>
-            <h2>For homework management</h2>
-            <p>Make the homework management easier.</p>
+            <h1>在线系统</h1>
+            <h2>课程及作业管理</h2>
+            <p>让课堂及作业更简单、更高效</p>
             <hr />
-            <h5>Please select your account type:</h5>
-            <a class="btn btn-outline-dark" href="{{ url_for('student.index_student') }}">Student</a>
-            <a class="btn btn-outline-dark" href="{{ url_for('assistant.index_assistant') }}">Assistant</a>
-            <a class="btn btn-outline-dark" href="{{ url_for('lecturer.index_lecturer') }}">Lecturer</a>
+            <h5>请选择你的账户类型：</h5>
+            <a class="btn btn-outline-dark" href="{{ url_for('student.index_student') }}">学生</a>
+            <a class="btn btn-outline-dark" href="{{ url_for('assistant.index_assistant') }}">助教</a>
+            <a class="btn btn-outline-dark" href="{{ url_for('lecturer.index_lecturer') }}">讲师</a>
         </div>
     </div>
 </div>
