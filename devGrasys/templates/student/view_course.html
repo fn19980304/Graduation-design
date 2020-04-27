@@ -12,7 +12,10 @@
         </div>
         <div class="col-md-9">
             <h1>{{ course.name }}</h1>
-            <h3>{{ course.lecturer_name }}</h3>
+            <h3>
+                <img src="{{ url_for('lecturer.get_avatar', filename=lecturer.avatar_s) }}" class="rounded img-fluid">
+                {{ lecturer.name }}
+            </h3>
             <h4><small class="text-muted">{{ course.intro }}</small></h4>
             <div class="float-right">
                 {% if course.student_is_joined(student) %}

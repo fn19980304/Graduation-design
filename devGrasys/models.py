@@ -143,7 +143,6 @@ class Course(db.Model, UserMixin):
     avatar_l = db.Column(db.String(64))
     avatar_raw = db.Column(db.String(64))
 
-
     # 讲师对课程：一对多
     lecturer_id = db.Column(db.Integer, db.ForeignKey('lecturer.id'))
     lecturer = db.relationship('Lecturer', back_populates='courses')
@@ -235,16 +234,20 @@ class Answer(db.Model):
         return self.correct.first() is not None
 
     def is_a(self):
-        return self.correct.first().grade is 'A'
+        if self.is_corrected():
+            return self.correct.first().grade is 'A'
 
     def is_b(self):
-        return self.correct.first().grade is 'B'
+        if self.is_corrected():
+            return self.correct.first().grade is 'B'
 
     def is_c(self):
-        return self.correct.first().grade is 'C'
+        if self.is_corrected():
+            return self.correct.first().grade is 'C'
 
     def is_d(self):
-        return self.correct.first().grade is 'D'
+        if self.is_corrected():
+            return self.correct.first().grade is 'D'
 
 
 class Correct(db.Model):

@@ -19,14 +19,9 @@
                                 <img src="{{ url_for('student.get_avatar', filename=course.avatar_s) }}">
                                 {{ course.name }} - {{ course.lecturer_name }} - {{ course.intro }}
                             </a>
-                        {% else %}
-                            <div class="tip">
-                                <h3>No course!</h3>
-                                <h3>Please join the course.</h3>
-                            </div>
+                            <hr/>
                         {% endif %}
                     </div>
-                    <hr/>
                 {% endfor %}
             </div>
         </div>

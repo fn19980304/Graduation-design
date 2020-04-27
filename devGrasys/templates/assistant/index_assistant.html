@@ -38,16 +38,22 @@
                         <div class="card-body">
                             <h3>The courses you have already joined:</h3>
                             <p>(course name - course lecturer - course introduction)</p>
-                            {% for course in courses %}
-                                {% if course.assistant_is_joined(assistant) %}
-                                    <a class="dead-link"
-                                       href="{{ url_for('assistant.view_course', course_name=course.name) }}">
-                                        <img src="{{ url_for('assistant.get_avatar', filename=course.avatar_s) }}">
-                                        {{ course.name }} - {{ course.lecturer_name }} - {{ course.intro }}
-                                    </a>
-                                    <hr/>
-                                {% endif %}
-                            {% endfor %}
+                            {% if assistant.courses.count() != 0 %}
+                                {% for course in courses %}
+                                    {% if course.assistant_is_joined(assistant) %}
+                                        <a class="dead-link"
+                                           href="{{ url_for('assistant.view_course', course_name=course.name) }}">
+                                            <img src="{{ url_for('assistant.get_avatar', filename=course.avatar_s) }}">
+                                            {{ course.name }} - {{ course.lecturer_name }} - {{ course.intro }}
+                                        </a>
+                                        <hr/>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                <div class="tip">
+                                    <h3>Please join the course.</h3>
+                                </div>
+                            {% endif %}
                         </div>
                     {% endif %}
                 </div>
@@ -66,10 +72,12 @@
                         </div>
                         <div class="card-body">
                             <div class="navbar-nav ml-auto">
-                                <a class="btn btn-outline-dark" href="{{ url_for('assistant.register_assistant') }}">Join Now</a>
+                                <a class="btn btn-outline-dark" href="{{ url_for('assistant.register_assistant') }}">Join
+                                    Now</a>
                             </div>
                             <hr>
-                            <small>Already have an account? <a href="{{ url_for('assistant.login_assistant') }}">Click here to
+                            <small>Already have an account? <a href="{{ url_for('assistant.login_assistant') }}">Click
+                                here to
                                 log in.</a>
                             </small>
                         </div>

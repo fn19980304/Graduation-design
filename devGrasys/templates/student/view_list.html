@@ -15,6 +15,12 @@
                     - {{ moment(homework.timestamp).format('LL') }}
                     - {{ moment(homework.deadline).format('LL') }}
                 </a>
+                {% if homework.is_answered(student) %}
+                    <span class="oi oi-check"></span>
+                {% else %}
+                    <span class="oi oi-x"></span>
+                {% endif %}
+                <br \>
             {% endfor %}
         </div>
     </div>

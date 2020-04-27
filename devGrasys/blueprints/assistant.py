@@ -79,7 +79,8 @@ def get_avatar(filename):
 def view_course(course_name):
     assistant = current_user
     course = Course.query.filter_by(name=course_name).first_or_404()
-    return render_template('assistant/view_course.html', course=course, assistant=assistant)
+    lecturer = Lecturer.query.filter_by(name=course.lecturer_name).first_or_404()
+    return render_template('assistant/view_course.html', course=course, assistant=assistant, lecturer=lecturer)
 
 
 @assistant_bp.route('/<course_name>/join', methods=['POST'])
@@ -146,8 +147,7 @@ def correct_homework(course_name, homework_title, student_name):
         db.session.add(correct)
         db.session.commit()
         return redirect_back(
-            url_for('assistant.correct_homework', course_name=course.name, homework_title=homework.title,
-                    student_name=student.name))
+            url_for('assistant.view_homework', course_name=course.name, homework_title=homework.title))
     correct = Correct.query.filter_by(answer=answer).first()
     return render_template('assistant/correct_homework.html', correct=correct, answer=answer, student=student,
                            homework=homework,

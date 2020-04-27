@@ -11,23 +11,24 @@
                     <h4>Please select the course:</h4>
                     <p>(course name - lecturer - course introduction)</p>
                 </div>
-                {% for course in courses %}
-                    <div class="card-body">
-                        {% if course.assistant_is_joined(assistant) %}
-                            <a class="dead-link"
-                               href="{{ url_for('assistant.view_list', course_name=course.name) }}">
-                                <img src="{{ url_for('assistant.get_avatar', filename=course.avatar_s) }}">
-                                {{ course.name }} - {{ course.lecturer_name }} - {{ course.intro }}
-                            </a>
-                        {% else %}
-                            <div class="tip">
-                                <h3>No course!</h3>
-                                <h3>Please join the course.</h3>
-                            </div>
-                        {% endif %}
+                {% if assistant.courses.count() !=0 %}
+                    {% for course in courses %}
+                        <div class="card-body">
+                            {% if course.assistant_is_joined(assistant) %}
+                                <a class="dead-link"
+                                   href="{{ url_for('assistant.view_list', course_name=course.name) }}">
+                                    <img src="{{ url_for('assistant.get_avatar', filename=course.avatar_s) }}">
+                                    {{ course.name }} - {{ course.lecturer_name }} - {{ course.intro }}
+                                </a>
+                            {% endif %}
+                        </div>
+                        <hr/>
+                    {% endfor %}
+                {% else %}
+                    <div class="tip">
+                        <h3>Please join the course.</h3>
                     </div>
-                    <hr/>
-                {% endfor %}
+                {% endif %}
             </div>
         </div>
     </div>

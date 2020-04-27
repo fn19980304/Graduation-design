@@ -7,7 +7,7 @@
 from flask import render_template, flash, redirect, url_for, Blueprint, send_from_directory, current_app
 from flask_login import login_user, current_user, login_required, logout_user
 
-from devGrasys.models import Student, Course, Homework, Answer, Correct
+from devGrasys.models import Student, Course, Homework, Answer, Correct, Lecturer
 from devGrasys.forms.student import RegisterFormStudent, LoginFormStudent, AnswerForm, EditProfileFormStudent, \
     UploadAvatarFormStudent, CropAvatarFormStudent
 from devGrasys.utils import redirect_back, flash_errors
@@ -77,7 +77,8 @@ def get_avatar(filename):
 def view_course(course_name):
     student = current_user
     course = Course.query.filter_by(name=course_name).first_or_404()
-    return render_template('student/view_course.html', course=course, student=student)
+    lecturer = Lecturer.query.filter_by(name=course.lecturer_name).first_or_404()
+    return render_template('student/view_course.html', course=course, student=student, lecturer=lecturer)
 
 
 @student_bp.route('/<course_name>/join', methods=['POST'])
@@ -117,7 +118,8 @@ def select_course():
 def view_list(course_name):
     course = Course.query.filter_by(name=course_name).first_or_404()
     homework_group = Homework.query.filter_by(course=course)
-    return render_template('student/view_list.html', course=course, homework_group=homework_group)
+    student = current_user
+    return render_template('student/view_list.html', student=student, course=course, homework_group=homework_group)
 
 
 @student_bp.route('/select/<course_name>/<homework_title>', methods=['GET', 'POST'])
