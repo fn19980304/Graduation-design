@@ -45,5 +45,4 @@
 所有boostrap无效的情况均使用《Flask Web实战开发》作者Github的bootstrap-flask资源以解决：
 [https://github.com/greyli/bootstrap-flask](https://github.com/greyli/bootstrap-flask)
 
-~~页面整体颜色待修改（增强对比度）~~
 
