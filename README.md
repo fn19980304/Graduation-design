@@ -38,6 +38,9 @@
 * 助教端：**实现加入及退出课程，实现作业列表查看，实现在线批改作业**
 * 讲师端：**实现创建及结束课程，实现发布新的作业，实现查看作业完成情况**
 
+## 目前进度：
+**完成系统基本功能的实现，待开始论文初稿的撰写**
+
 ### 注：
 所有boostrap无效的情况均使用《Flask Web实战开发》作者Github的bootstrap-flask资源以解决：
 [https://github.com/greyli/bootstrap-flask](https://github.com/greyli/bootstrap-flask)
