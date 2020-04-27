@@ -36,9 +36,9 @@ def login_lecturer():
         user = Lecturer.query.filter_by(user_id=form.user_id.data).first()
         if user is not None and user.validate_password(form.password.data):
             if login_user(user, form.remember_me.data):
-                flash('Login success.', 'info')
+                flash('登录成功。', 'info')
                 return redirect_back()
-        flash('Invalid userID or password.', 'warning')
+        flash('ID或密码不正确。', 'warning')
 
     return render_template('lecturer/login_lecturer.html', form=form)
 
@@ -47,7 +47,7 @@ def login_lecturer():
 @login_required
 def logout_lecturer():
     logout_user()
-    flash('Logout success.', 'info')
+    flash('注销成功。', 'info')
     return redirect(url_for('main.index'))
 
 
@@ -101,7 +101,7 @@ def end_course(course_name):
     course = Course.query.filter_by(name=course_name).first_or_404()
     db.session.delete(course)
     db.session.commit()
-    flash('Course ended.', 'success')
+    flash('课程结束。', 'success')
     return redirect(url_for('lecturer.index_lecturer'))
 
 
@@ -134,7 +134,7 @@ def edit_course(course_name):
         course.name = form.name.data
         course.intro = form.intro.data
         db.session.commit()
-        flash('Updated success.', 'success')
+        flash('上传成功。', 'success')
         return redirect(url_for('lecturer.view_course', course_name=course.name))
     form.name.data = course.name
     form.intro.data = course.intro
@@ -158,7 +158,7 @@ def upload_picture(course_name):
         filename = avatars.save_avatar(image)
         course.avatar_raw = filename
         db.session.commit()
-        flash('Image uploaded, please crop.', 'success')
+        flash('图片上传成功, 请裁剪。', 'success')
     flash_errors(form)
     return redirect(url_for('lecturer.change_picture', course_name=course.name))
 
@@ -177,7 +177,7 @@ def crop_picture(course_name):
         course.avatar_m = filenames[1]
         course.avatar_l = filenames[2]
         db.session.commit()
-        flash('Picture updated.', 'success')
+        flash('上传成功。', 'success')
     flash_errors(form)
     return redirect(url_for('lecturer.change_picture', course_name=course.name))
 
@@ -238,7 +238,7 @@ def edit_profile():
     if form.validate_on_submit():
         current_user.name = form.name.data
         db.session.commit()
-        flash('Profile updated.', 'success')
+        flash('信息更新。', 'success')
         return redirect(url_for('lecturer.index_lecturer'))
     form.name.data = current_user.name
     return render_template('lecturer/settings/edit_profile.html', form=form)
@@ -259,7 +259,7 @@ def upload_avatar():
         filename = avatars.save_avatar(image)
         current_user.avatar_raw = filename
         db.session.commit()
-        flash('Image uploaded, please crop.', 'success')
+        flash('图片上传成功, 请裁剪。', 'success')
     flash_errors(form)
     return redirect(url_for('.change_avatar'))
 
@@ -277,6 +277,6 @@ def crop_avatar():
         current_user.avatar_m = filenames[1]
         current_user.avatar_l = filenames[2]
         db.session.commit()
-        flash('Avatar updated.', 'success')
+        flash('头像上传成功。', 'success')
     flash_errors(form)
     return redirect(url_for('.change_avatar'))

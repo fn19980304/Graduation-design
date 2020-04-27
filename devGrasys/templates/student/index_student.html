@@ -1,7 +1,7 @@
 {% extends 'student/base.html' %}
 {% from 'bootstrap/form.html' import render_form %}
 
-{% block title %}Student{% endblock %}
+{% block title %}学生{% endblock %}
 
 {% block content %}
     {% if current_user.is_authenticated %}
@@ -12,18 +12,18 @@
                         <img class="rounded img-fluid avatar-s"
                              src="{{ url_for('student.get_avatar', filename=current_user.avatar_m) }}">
                         <span class="card-title">{{ current_user.name }} -
-                            <span class="oi oi-person"> Student</span>
+                            <span class="oi oi-person"> 学生</span>
                         </span>
                     </div>
                     {% if courses|length ==0 %}
                         <div class="tip">
-                            <h3>No course yet!</h3>
-                            <h3>Please wait.</h3>
+                            <h3>暂时还没有课程！</h3>
+                            <h3>请等待讲师创建。</h3>
                         </div>
                     {% else %}
                         <div class="card-body">
-                            <h3>The courses you can join:</h3>
-                            <p>(course name - course lecturer - course introduction)</p>
+                            <h3>你现在可以加入的课程：</h3>
+                            <p>(课程名称 - 讲师名 - 课程介绍)</p>
                             {% for course in courses %}
                                 {% if not course.student_is_joined(student) %}
                                     <a class="dead-link"
@@ -36,8 +36,8 @@
                             {% endfor %}
                         </div>
                         <div class="card-body">
-                            <h3>The courses you have already joined:</h3>
-                            <p>(course name - course lecturer - course introduction)</p>
+                            <h3>你已经加入的课程：</h3>
+                            <p>(课程名称 - 讲师名 - 课程介绍)</p>
                             {% if student.courses.count() != 0 %}
                                 {% for course in courses %}
                                     {% if course.student_is_joined(student) %}
@@ -51,7 +51,7 @@
                                 {% endfor %}
                             {% else %}
                                 <div class="tip">
-                                    <h3>Please join the course.</h3>
+                                    <h3>请加入一个课程。</h3>
                                 </div>
                             {% endif %}
                         </div>
@@ -69,19 +69,17 @@
                 <div class="col-md-4">
                     <div class="card mb-3 w-100 bg-light">
                         <div class="card-header">
-                            <h4>Welcome to use!</h4>
+                            <h4>欢迎使用！</h4>
                         </div>
                         <div class="card-body">
                             <div class="navbar-nav ml-auto">
                                 <a class="btn btn-outline-dark"
-                                   href="{{ url_for('student.register_student') }}">Join
-                                    Now</a>
+                                   href="{{ url_for('student.register_student') }}">
+                                    注册
+                                </a>
                             </div>
                             <hr>
-                            <small>Already have an account? <a
-                                    href="{{ url_for('student.login_student') }}">Click here
-                                to log
-                                in.</a>
+                            <small>已经注册了账户？ <a href="{{ url_for('student.login_student') }}">点击此处登录</a>
                             </small>
                         </div>
                     </div>

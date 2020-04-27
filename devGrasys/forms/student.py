@@ -15,42 +15,42 @@ from devGrasys.models import Student
 
 
 class LoginFormStudent(FlaskForm):
-    user_id = StringField('UserID', validators=[DataRequired(), Length(10, 10)])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Remember me')
-    submit = SubmitField('Log in')
+    user_id = StringField('用户ID', validators=[DataRequired(), Length(10, 10)])
+    password = PasswordField('密码', validators=[DataRequired()])
+    remember_me = BooleanField('记住我')
+    submit = SubmitField('登录')
 
 
 class RegisterFormStudent(FlaskForm):
-    name = StringField('Name', validators=[DataRequired(), Length(1, 30)])
-    user_id = StringField('UserID', validators=[DataRequired(), Length(10, 10), Regexp('^[S][0-9]*$',
+    name = StringField('用户名称', validators=[DataRequired(), Length(1, 30)])
+    user_id = StringField('用户ID', validators=[DataRequired(), Length(10, 10), Regexp('^[S][0-9]*$',
                                                                                        message='Student ID should '
                                                                                                'begin with S.')])
-    password = PasswordField('Password', validators=[DataRequired(), Length(8, 128), EqualTo('password2')])
-    password2 = PasswordField('Confirm password', validators=[DataRequired()])
-    submit = SubmitField()
+    password = PasswordField('密码', validators=[DataRequired(), Length(8, 128), EqualTo('password2')])
+    password2 = PasswordField('确认密码', validators=[DataRequired()])
+    submit = SubmitField('提交')
 
     def validate_user_id(self, field):
         if Student.query.filter_by(user_id=field.data).first():
-            raise ValidationError('The ID is already in use.')
+            raise ValidationError('ID已经被其他用户注册！')
 
 
 class AnswerForm(FlaskForm):
-    body = CKEditorField('Your answer:', validators=[DataRequired()])
-    submit = SubmitField()
+    body = CKEditorField('你的答案：', validators=[DataRequired()])
+    submit = SubmitField('提交')
 
 
 class EditProfileFormStudent(FlaskForm):
-    name = StringField('Name', validators=[DataRequired(), Length(1, 30)])
-    submit = SubmitField()
+    name = StringField('用户名称', validators=[DataRequired(), Length(1, 30)])
+    submit = SubmitField('更改')
 
 
 class UploadAvatarFormStudent(FlaskForm):
-    image = FileField('Upload', validators=[
+    image = FileField('上传', validators=[
         FileRequired(),
-        FileAllowed(['jpg', 'png'], 'The file format should be .jpg or .png.')
+        FileAllowed(['jpg', 'png'], '文件格式应为 .jpg 或 .png.')
     ])
-    submit = SubmitField()
+    submit = SubmitField('上传')
 
 
 class CropAvatarFormStudent(FlaskForm):
@@ -58,4 +58,4 @@ class CropAvatarFormStudent(FlaskForm):
     y = HiddenField()
     w = HiddenField()
     h = HiddenField()
-    submit = SubmitField('Crop and Update')
+    submit = SubmitField('裁剪并上传')

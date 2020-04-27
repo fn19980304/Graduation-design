@@ -35,9 +35,9 @@ def login_student():
         user = Student.query.filter_by(user_id=form.user_id.data).first()
         if user is not None and user.validate_password(form.password.data):
             if login_user(user, form.remember_me.data):
-                flash('Login success.', 'info')
+                flash('登录成功。', 'info')
                 return redirect_back()
-        flash('Invalid userID or password.', 'warning')
+        flash('ID或密码不正确。', 'warning')
 
     return render_template('student/login_student.html', form=form)
 
@@ -46,7 +46,7 @@ def login_student():
 @login_required
 def logout_student():
     logout_user()
-    flash('Logout success.', 'info')
+    flash('注销成功。', 'info')
     return redirect(url_for('main.index'))
 
 
@@ -86,11 +86,11 @@ def join_course(course_name):
     student = current_user
     course = Course.query.filter_by(name=course_name).first_or_404()
     if course.student_is_joined(student=student):
-        flash('Already joined.', 'info')
+        flash('已加入。', 'info')
         return redirect_back()
 
     course.student_join(student)
-    flash('Course joined.', 'success')
+    flash('加入成功。', 'success')
     return redirect_back()
 
 
@@ -99,11 +99,11 @@ def quit_course(course_name):
     student = current_user
     course = Course.query.filter_by(name=course_name).first_or_404()
     if not course.student_is_joined(student=student):
-        flash('Not joined yet.', 'info')
+        flash('尚未加入。', 'info')
         return redirect_back()
 
     course.student_quit(student)
-    flash('Course quoted.', 'success')
+    flash('退出成功。', 'success')
     return redirect_back()
 
 
@@ -148,7 +148,7 @@ def edit_profile():
     if form.validate_on_submit():
         current_user.name = form.name.data
         db.session.commit()
-        flash('Profile updated.', 'success')
+        flash('信息更新。', 'success')
         return redirect(url_for('student.index_student'))
     form.name.data = current_user.name
     return render_template('student/settings/edit_profile.html', form=form)
@@ -169,7 +169,7 @@ def upload_avatar():
         filename = avatars.save_avatar(image)
         current_user.avatar_raw = filename
         db.session.commit()
-        flash('Image uploaded, please crop.', 'success')
+        flash('图片上传成功, 请裁剪。', 'success')
     flash_errors(form)
     return redirect(url_for('.change_avatar'))
 
@@ -187,6 +187,6 @@ def crop_avatar():
         current_user.avatar_m = filenames[1]
         current_user.avatar_l = filenames[2]
         db.session.commit()
-        flash('Avatar updated.', 'success')
+        flash('头像上传成功。', 'success')
     flash_errors(form)
     return redirect(url_for('.change_avatar'))

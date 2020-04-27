@@ -1,7 +1,7 @@
 {% extends 'student/base.html' %}
 {% from 'bootstrap/form.html' import render_form %}
 
-{% block title %}View / Answer - {{ homework.title }} - Student{% endblock %}
+{% block title %}查看 / 答题 - {{ homework.title }} - 学生{% endblock %}
 
 {% block content %}
     <div class="row">
@@ -10,19 +10,19 @@
             <h5>{{ homework.description | safe }}</h5>
             <hr/>
             {% if homework.is_answered(student) %}
-                <h3>Your answer:</h3>
+                <h3>你的答案：</h3>
                 <p>{{ answer.body | safe }}</p>
                 <hr/>
-                <h3>The correction result:</h3>
+                <h3>批改结果：</h3>
                 {% if answer.is_corrected() %}
-                    <h4>Assistant remark:</h4>
+                    <h4>助教评语：</h4>
                     <p>{{ correct.body | safe }}</p>
-                    <h4>Your grade:</h4>
+                    <h4>你的成绩：</h4>
                     <p>{{ correct.grade }}</p>
                 {% else %}
                     <div class="tip">
-                        <h3>Not corrected yet!</h3>
-                        <h3>Please wait the assistant to correct your answer.</h3>
+                        <h3>未评改！</h3>
+                        <h3>请等待助教批改作业。</h3>
                     </div>
                 {% endif %}
             {% else %}

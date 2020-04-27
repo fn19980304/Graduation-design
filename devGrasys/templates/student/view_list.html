@@ -1,13 +1,13 @@
 {% extends 'student/base.html' %}
 {% from 'bootstrap/form.html' import render_form %}
 
-{% block title %}View - {{ course.name }} Homework - Student{% endblock %}
+{% block title %}查看 - {{ course.name }} 作业 - 学生{% endblock %}
 
 {% block content %}
     <div class="row">
         <div class="col-md-8">
-            <h3>Homework list:</h3>
-            <h4>(title - starting time - deadline)</h4>
+            <h3>作业列表：</h3>
+            <h4>(标题 - 起始时间 - 截止日期)</h4>
             {% for homework in homework_group %}
                 <a class="dead-link"
                    href="{{ url_for('student.view_homework', course_name=course.name,homework_title=homework.title) }}">
